@@ -3,8 +3,8 @@
     "version": "0.0.0",
     "description": "Dynamic Web Server using Node JS",
     "author": {
-        "name": "",
-        "email": ""
+        "name": "Anshul Bharath",
+        "email": "Anshul.Bharath@gmail.com"
     },
     "contributors": [
         {
@@ -19,7 +19,7 @@
     "main": "server.js",
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/anshulBharath/UST-WebDev-DynamicServer"
     },
     "dependencies": {
         "express": "^4.17.1",
