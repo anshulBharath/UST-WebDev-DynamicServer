@@ -11,15 +11,6 @@ let public_dir = path.join(__dirname, 'public');
 let template_dir = path.join(__dirname, 'templates');
 let db_filename = path.join(__dirname, 'db', 'usenergy.sqlite3');
 
-let db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) =>{
-    if (err){
-        console.log(err);
-    }
-    else {
-        console.log("Connected to database");
-    }
-});
-
 let app = express();
 let port = 8000;
 
@@ -43,13 +34,36 @@ app.get('/', (req, res) => {
 });
 
 // GET request handler for '/year/*'
-app.get('/year/:selected_year', (req, res) => {
+app.get('/year/:selected_year',(req, res) => {
     console.log(req.params.selected_year);
-    fs.readFile(path.join(template_dir, 'year.html'), (err, template) => {
+    fs.readFile(path.join(template_dir, 'year.html'), 'utf-8', (err, template) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
-        res.status(200).type('html').send(template); // <-- you may need to change this
+        if(err){
+            res.status(404).send("Error: File Not Found");
+        }
+        else { 
+            let response = template.replace("{{{Year}}}", req.params.selected_year);
+            db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?', [req.params.selected_year], (err, rows) =>{
+                let list_items = '';
+
+                for(var i=0; i<rows.length; i++){
+                    list_items += '<tr>\n';
+                    list_items += '<td>' + rows[i].state_abbreviation + '</td>\n';
+                    list_items += '<td>' + rows[i].coal + '</td>\n';
+                    list_items += '<td>' + rows[i].natural_gas + '</td>\n';
+                    list_items += '<td>' + rows[i].nuclear + '</td>\n';
+                    list_items += '<td>' + rows[i].petroleum + '</td>\n';
+                    list_items += '<td>' + rows[i].renewable + '</td>\n';
+                    list_items += '</tr>\n';
+                }
+
+                response = response.replace("{{{Table}}}", list_items);
+                res.status(200).type('html').send(response);
+            });
+            
+        }
     });
 });
 
