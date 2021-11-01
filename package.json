@@ -12,8 +12,8 @@
             "email": ""
         },
         {
-            "name": "",
-            "email": ""
+            "name": "Zak Nilsen",
+            "email": "nils8354@stthomas.edu"
         }
     ],
     "main": "server.js",
@@ -22,6 +22,7 @@
         "url": "https://github.com/anshulBharath/UST-WebDev-DynamicServer"
     },
     "dependencies": {
+        "chart.js": "^3.6.0",
         "express": "^4.17.1",
         "sqlite3": "^5.0.2"
     }
