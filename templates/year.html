@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>US Energy Consumption</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/foundation.css">
     <script type="application/javascript">
         // `year` and total counts for entire US => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
@@ -15,12 +15,53 @@
         var petroleum_count = {{{PETROLEUM_COUNT}}};
         var renewable_count = {{{RENEWABLE_COUNT}}};
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- create template here -->
+    <div class="grid-container">
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <table>
+                    <tr>
+                        <th>State</th>
+                        <th>Coal</th>
+                        <th>Natural Gas</th>
+                        <th>Nuclear</th>
+                        <th>Petroluem</th>
+                        <th>Renewable</th>
+                    </tr>
 
-    <div>
-        Test code
-    </div>
+                    {{{Table}}}
+
+                </table> 
+            </div>
+
+            <div class="cell">
+                <canvas id="myChart" width="200" height="200"></canvas>
+            </div>
+        </div>
 </body>
+
+<script>
+    let ctx = document.getElementById('myChart');
+    let myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
+            datasets: [{
+                label: 'Total US Consumption By Energy Source',
+                data: [coal_count, natural_gas_count, nuclear_count, petroleum_count, renewable_count],
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(53, 47, 48)',
+                'rgb(44, 204, 185)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+</script>
 </html>
