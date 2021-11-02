@@ -6,7 +6,6 @@
     <title>US Energy Consumption</title>
     <!--<link rel="stylesheet" href="css/style.css">-->
     <script type="application/javascript">
-        let Chart = require('chart.js');
         // `year` and total counts for entire US => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
         var year = {{{YEAR}}};
@@ -16,29 +15,10 @@
         var petroleum_count = {{{PETROLEUM_COUNT}}};
         var renewable_count = {{{RENEWABLE_COUNT}}};
 
-        function insertText(){
-            document.getElementById("testId").innerHTML = coal_count;
-        }
-
-        let ctx = document.getElementById('myChart');
-        let myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
-                datasets: [{
-                    label: 'Total US Consumption By Energy Source',
-                    data: [coal_count, natural_gas_count, nuclear_count, petroleum_count, renewable_count],
-                    backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 4
-                }]
-            }
-        });
+        
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- create template here -->
@@ -65,7 +45,29 @@
     </div>
 
     <div>
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <canvas id="myChart" width="500" height="500"></canvas>
     </div>
 </body>
+
+<script>
+    let ctx = document.getElementById('myChart');
+    let myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
+            datasets: [{
+                label: 'Total US Consumption By Energy Source',
+                data: [coal_count, natural_gas_count, nuclear_count, petroleum_count, renewable_count],
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(53, 47, 48)',
+                'rgb(44, 204, 185)'
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+</script>
 </html>
