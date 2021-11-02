@@ -6,19 +6,47 @@
     <title>US Energy Consumption</title>
     <!--<link rel="stylesheet" href="css/style.css">-->
     <script type="application/javascript">
+        let Chart = require('chart.js');
         // `year` and total counts for entire US => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        /*var year = {{{YEAR}}};
+        var year = {{{YEAR}}};
         var coal_count = {{{COAL_COUNT}}};
         var natural_gas_count = {{{NATURAL_GAS_COUNT}}};
         var nuclear_count = {{{NUCLEAR_COUNT}}};
         var petroleum_count = {{{PETROLEUM_COUNT}}};
-        var renewable_count = {{{RENEWABLE_COUNT}}};*/
+        var renewable_count = {{{RENEWABLE_COUNT}}};
+
+        function insertText(){
+            document.getElementById("testId").innerHTML = coal_count;
+        }
+
+        let ctx = document.getElementById('myChart');
+        let myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
+                datasets: [{
+                    label: 'Total US Consumption By Energy Source',
+                    data: [coal_count, natural_gas_count, nuclear_count, petroleum_count, renewable_count],
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            }
+        });
+
     </script>
 </head>
 <body>
     <!-- create template here -->
-    {{{Year}}}
+    <div id="testId">
+        coal count
+    </div>
+    
+
     <div>
         <table>
             <tr>
@@ -34,6 +62,10 @@
 
         </table>
         
+    </div>
+
+    <div>
+        <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 </body>
 </html>
