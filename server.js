@@ -44,11 +44,12 @@ app.get('/year/:selected_year',(req, res) => {
             res.status(404).send("Error: File Not Found");
         }
         else { 
-            let response = template.replace("{{{Year}}}", req.params.selected_year);
+            let response = template.replace("{{{YEAR}}}", req.params.selected_year);
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?', [req.params.selected_year], (err, rows) =>{
                 let list_items = '';
 
-                for(var i=0; i<rows.length; i++){
+                //Populating table
+                for(let i=0; i<rows.length; i++){
                     list_items += '<tr>\n';
                     list_items += '<td>' + rows[i].state_abbreviation + '</td>\n';
                     list_items += '<td>' + rows[i].coal + '</td>\n';
@@ -58,6 +59,36 @@ app.get('/year/:selected_year',(req, res) => {
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
                     list_items += '</tr>\n';
                 }
+
+                let coalTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    coalTotal += rows[i].coal;
+                }
+                response = response.replace("{{{COAL_COUNT}}}", coalTotal);
+
+                let naturalGasTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    naturalGasTotal += rows[i].natural_gas;
+                }
+                response = response.replace("{{{NATURAL_GAS_COUNT}}}", naturalGasTotal);
+
+                let nuclearTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    nuclearTotal += rows[i].nuclear;
+                }
+                response = response.replace("{{{NUCLEAR_COUNT}}}", nuclearTotal);
+
+                let petroleumTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    petroleumTotal += rows[i].petroleum;
+                }
+                response = response.replace("{{{PETROLEUM_COUNT}}}", petroleumTotal);
+
+                let renewableTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    renewableTotal += rows[i].renewable;
+                }
+                response = response.replace("{{{RENEWABLE_COUNT}}}", renewableTotal);
 
                 response = response.replace("{{{Table}}}", list_items);
                 res.status(200).type('html').send(response);
