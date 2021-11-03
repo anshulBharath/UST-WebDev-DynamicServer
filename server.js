@@ -117,15 +117,24 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             res.status(404).send("Error: File Not Found");
         } else {
             let response = template.replace('{{{ENERGY_TYPE}}}', req.params.selected_energy_source);
+
             db.all('SELECT state_abbreviation, year, ? FROM Consumption', [req.params.selected_energy_source], (err, rows) => {
                 
                 let list_items = '';
-                for(let i; i < rows.length; i++) {
+                for(let i = 0; i < 51; i++) {
                     list_items += '<th>' + rows[i].state_abbreviation + '</th>';
                 }
                 response = response.replace('{{{STATE_ABB}}}', list_items);
-                
-                //let energy_counts = {}
+
+                let data_items = '';
+                for(let i = 0; i < rows.length; i++) {
+                    data_items += '<tr>\n';
+                    data_items += '<td>' + rows[i].year + '</td>\n';
+                    data_items += '</tr>\n';
+                }
+                response = response.replace('{{{Table_DATA}}}', data_items);
+
+                //let energy_counts = {};
                 //for(let i; i < rows.length; i++) {
                     //energy_counts[rows[i].state_abbreviation];
                 //}
