@@ -8,7 +8,7 @@
     <script type="application/javascript">
         // `year` and total counts for entire US => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        var year = {{{YEAR}}};
+        //var year = {{YEAR}}};
         var coal_count = {{{COAL_COUNT}}};
         var natural_gas_count = {{{NATURAL_GAS_COUNT}}};
         var nuclear_count = {{{NUCLEAR_COUNT}}};
@@ -20,6 +20,7 @@
 <body>
     <!-- create template here -->
     <div class="grid-container">
+        <h1>Energy Consumption for year: {{{YEAR}}}</h1>
         <div class="grid-x grid-padding-x">
             <div class="cell">
                 <table>
