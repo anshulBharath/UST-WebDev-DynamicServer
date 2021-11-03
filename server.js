@@ -112,11 +112,27 @@ app.get('/state/:selected_state', (req, res) => {
 // GET request handler for '/energy/*'
 app.get('/energy/:selected_energy_source', (req, res) => {
     console.log(req.params.selected_energy_source);
-    fs.readFile(path.join(template_dir, 'energy.html'), (err, template) => {
-        // modify `template` and send response
-        // this will require a query to the SQL database
-
-        res.status(200).type('html').send(template); // <-- you may need to change this
+    fs.readFile(path.join(template_dir, 'energy.html'), 'utf-8', (err, template) => {
+        if(err) {
+            res.status(404).send("Error: File Not Found");
+        } else {
+            let response = template.replace('{{{ENERGY_TYPE}}}', req.params.selected_energy_source);
+            db.all('SELECT state_abbreviation, year, ? FROM Consumption', [req.params.selected_energy_source], (err, rows) => {
+                
+                let list_items = '';
+                for(let i; i < rows.length; i++) {
+                    list_items += '<th>' + rows[i].state_abbreviation + '</th>';
+                }
+                response = response.replace('{{{STATE_ABB}}}', list_items);
+                
+                //let energy_counts = {}
+                //for(let i; i < rows.length; i++) {
+                    //energy_counts[rows[i].state_abbreviation];
+                //}
+                //response = response.replace('{{{ENERGY_COUNTS}}}');
+                res.status(200).type('html').send(response); 
+            });
+        }
     });
 });
 
