@@ -9,7 +9,7 @@
     <script type="application/javascript">
         // `energy_type` and object of consumption per year per state => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        //var energy_type = ENERGY_TYPE;
+        var energy_type = {{{ENERGY_TYPE}}};
         var energy_counts = {{{ENERGY_COUNTS}}}; // dictionary of arrays (e.g. {AK: [...], AL: [...], AR: [...], ...})
     </script>
 </head>
@@ -19,7 +19,6 @@
         <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
 
         <div class = "grid-x grid-padding-x">
-            <h1>Energy use of {{{ENERGY_TYPE}}} across each state for every year </h1>
             <div class="cell">
                 <table>
                     <tr>
