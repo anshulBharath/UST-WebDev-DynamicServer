@@ -119,7 +119,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             let response = template.replace('{{{ENERGY_TYPE}}}', req.params.selected_energy_source);
 
             db.all('SELECT state_abbreviation, year, ? FROM Consumption', [req.params.selected_energy_source], (err, rows) => {
-                
+                //Fill out state columns
                 let list_items = '';
                 for(let i = 0; i < 51; i++) {
                     list_items += '<th>' + rows[i].state_abbreviation + '</th>';
@@ -130,6 +130,11 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 for(let i = 0; i < rows.length; i++) {
                     data_items += '<tr>\n';
                     data_items += '<td>' + rows[i].year + '</td>\n';
+                    //This loop is to populate each state with right data
+                    for(let j = 0; j < 51; j++) {
+                        //need to change j to actual value- struggling to figure out
+                        data_items += '<td>' + j +'</td>\n'
+                    }
                     data_items += '</tr>\n';
                 }
                 response = response.replace('{{{Table_DATA}}}', data_items);
