@@ -110,15 +110,16 @@ app.get('/state/:selected_state', (req, res) => {
         if(err){
             res.status(404).send("Error: File Not Found");
         }
-        else { 
+        else {
             let response = template.replace("{{{STATE}}}", req.params.selected_state);
-            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ?', [req.params.selected_year], (err, rows) =>{
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM States WHERE state_abbreviation = ?', [req.params.selected_year], (err, rows) =>{
                 let list_items = '';
 
                 //Populating table
+                /*
                 for(let i=0; i<rows.length; i++){
                     list_items += '<tr>\n';
-                    list_items += '<td>' + rows[i].state_abbreviation + '</td>\n';
+                    list_items += '<td>' + rows[i].year + '</td>\n';
                     list_items += '<td>' + rows[i].coal + '</td>\n';
                     list_items += '<td>' + rows[i].natural_gas + '</td>\n';
                     list_items += '<td>' + rows[i].nuclear + '</td>\n';
@@ -126,6 +127,16 @@ app.get('/state/:selected_state', (req, res) => {
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
                     list_items += '</tr>\n';
                 }
+                */
+
+                list_items += '<tr>\n';
+                list_items += '<td>' + rows.year + '</td>\n';
+                list_items += '<td>' + rows.coal + '</td>\n';
+                list_items += '<td>' + rows.natural_gas + '</td>\n';
+                list_items += '<td>' + rows.nuclear + '</td>\n';
+                list_items += '<td>' + rows.petroleum + '</td>\n';
+                list_items += '<td>' + rows.renewable + '</td>\n';
+                list_items += '</tr>\n';
 
                 let coalTotal = 0;
                 for(let i=0; i<rows.length; i++){
