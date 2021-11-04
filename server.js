@@ -101,11 +101,39 @@ app.get('/year/:selected_year',(req, res) => {
 // GET request handler for '/state/*'
 app.get('/state/:selected_state', (req, res) => {
     console.log(req.params.selected_state);
-    fs.readFile(path.join(template_dir, 'state.html'), (err, template) => {
+    fs.readFile(path.join(template_dir, 'state.html'), 'utf-8',(err, template) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
-        res.status(200).type('html').send(template); // <-- you may need to change this
+        //res.status(200).type('html').send(template); // <-- you may need to change this
+    
+        if(err){
+            res.status(404).send("Error: File Not Found");
+        }
+        else {
+            let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+                let list_items = '';
+
+                //Populating table
+                for(let i=0; i<rows.length; i++){
+                    list_items += '<tr>\n';
+                    list_items += '<td>' + rows[i].year + '</td>\n';
+                    list_items += '<td>' + rows[i].coal + '</td>\n';
+                    list_items += '<td>' + rows[i].natural_gas + '</td>\n';
+                    list_items += '<td>' + rows[i].nuclear + '</td>\n';
+                    list_items += '<td>' + rows[i].petroleum + '</td>\n';
+                    list_items += '<td>' + rows[i].renewable + '</td>\n';
+                    list_items += '</tr>\n';
+                }
+
+                response = response.replace("{{{Table}}}", list_items);
+                res.status(200).type('html').send(response);
+            });
+            
+            
+        }
+    
     });
 });
 
