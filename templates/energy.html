@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>US Energy Consumption</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/foundation.css">
     <script type="application/javascript">
         // `energy_type` and object of consumption per year per state => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
@@ -15,6 +16,8 @@
 <body>
     <!-- create template here -->
     <div class="grid-container">
+        <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
+
         <div class = "grid-x grid-padding-x">
             <div class="cell">
                 <table>
@@ -23,8 +26,9 @@
                         <!--Fill in States-->
                         {{{STATE_ABB}}}
                     </tr>
+
+                        {{{TABLE_DATA}}}
     
-                    <!--Each new year under year column-->
                 </table>
             </div>
         </div>

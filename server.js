@@ -45,7 +45,7 @@ app.get('/year/:selected_year',(req, res) => {
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
-            db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?', [req.params.selected_year], (err, rows) =>{
+            db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
                 let list_items = '';
 
                 //Populating table
@@ -101,11 +101,39 @@ app.get('/year/:selected_year',(req, res) => {
 // GET request handler for '/state/*'
 app.get('/state/:selected_state', (req, res) => {
     console.log(req.params.selected_state);
-    fs.readFile(path.join(template_dir, 'state.html'), (err, template) => {
+    fs.readFile(path.join(template_dir, 'state.html'), 'utf-8',(err, template) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
-        res.status(200).type('html').send(template); // <-- you may need to change this
+        //res.status(200).type('html').send(template); // <-- you may need to change this
+    
+        if(err){
+            res.status(404).send("Error: File Not Found");
+        }
+        else {
+            let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+                let list_items = '';
+
+                //Populating table
+                for(let i=0; i<rows.length; i++){
+                    list_items += '<tr>\n';
+                    list_items += '<td>' + rows[i].year + '</td>\n';
+                    list_items += '<td>' + rows[i].coal + '</td>\n';
+                    list_items += '<td>' + rows[i].natural_gas + '</td>\n';
+                    list_items += '<td>' + rows[i].nuclear + '</td>\n';
+                    list_items += '<td>' + rows[i].petroleum + '</td>\n';
+                    list_items += '<td>' + rows[i].renewable + '</td>\n';
+                    list_items += '</tr>\n';
+                }
+
+                response = response.replace("{{{Table}}}", list_items);
+                res.status(200).type('html').send(response);
+            });
+            
+            
+        }
+    
     });
 });
 
@@ -117,20 +145,54 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             res.status(404).send("Error: File Not Found");
         } else {
             let response = template.replace('{{{ENERGY_TYPE}}}', req.params.selected_energy_source);
-            db.all('SELECT state_abbreviation, year, ? FROM Consumption', [req.params.selected_energy_source], (err, rows) => {
-                
+            response = response.replace('{{{ENERGY}}}', req.params.selected_energy_source);
+
+            db.all('SELECT state_abbreviation FROM States',(err, states) => {
+                //Using state table to fill in state abreviation because of ordering of states when queried
                 let list_items = '';
-                for(let i; i < rows.length; i++) {
-                    list_items += '<th>' + rows[i].state_abbreviation + '</th>';
-                }
-                response = response.replace('{{{STATE_ABB}}}', list_items);
-                
-                //let energy_counts = {}
-                //for(let i; i < rows.length; i++) {
-                    //energy_counts[rows[i].state_abbreviation];
-                //}
-                //response = response.replace('{{{ENERGY_COUNTS}}}');
-                res.status(200).type('html').send(response); 
+                    for(let i = 0; i < states.length; i++) {
+                        list_items += '<th>' + states[i].state_abbreviation + '</th>';
+                    }
+                    response = response.replace('{{{STATE_ABB}}}', list_items);
+
+                //Had to SELECT * here because the ? mark syntax was not working here for some reason
+                let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
+                db.all(querry,(err, rows) => {
+                    //res.send(rows);
+
+                    let data_items = '';
+                    let rowCount=0 //Running count of the row
+
+                    //loops through the years to set the first column
+                    for(let i = 1960; i <= 2018; i++) {
+                        data_items += '<tr>\n';
+                        data_items += '<td>' + i + '</td>\n';
+                    
+                        for(let i=0; i<51; i++){
+                            switch(req.params.selected_energy_source){
+                                case 'coal':
+                                    data_items += '<td>' + rows[rowCount].coal+ '</td>\n';
+                                    break;
+                                case 'natural_gas':
+                                    data_items += '<td>' + rows[rowCount].natural_gas+ '</td>\n';
+                                    break;
+                                case 'nuclear':
+                                    data_items += '<td>' + rows[rowCount].nuclear+ '</td>\n';
+                                    break;
+                                case 'petroleum':
+                                    data_items += '<td>' + rows[rowCount].petroleum+ '</td>\n';
+                                    break;
+                                case 'renewable':
+                                    data_items += '<td>' + rows[rowCount].renewable+ '</td>\n';
+                                    break;            
+                            }
+                        rowCount++;
+                        }
+                        data_items += '</tr>\n'; //End of row
+                    }
+                    response = response.replace('{{{TABLE_DATA}}}', data_items);
+                    res.status(200).type('html').send(response); 
+                });
             });
         }
     });
