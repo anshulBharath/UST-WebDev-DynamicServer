@@ -156,7 +156,9 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     response = response.replace('{{{STATE_ABB}}}', list_items);
 
                 //Had to SELECT * here because the ? mark syntax was not working here for some reason
-                db.all('SELECT * FROM Consumption;',(err, rows) => {
+                let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
+                db.all(querry,(err, rows) => {
+                    //res.send(rows);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
