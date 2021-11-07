@@ -1,1 +1,56 @@
 /* Custom CSS Rules */
+
+/*html { overflow-y: scroll; overflow-x:hidden; }*/
+/*body { position: absolute; }*/
+
+.navbar button{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.navbar-home {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.navbar-span a {
+    font-size:1.25em;
+}
+
+.energy-table-scroll {
+    width: max-width;
+    height: 700px;
+    display: block;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.table-scroll {
+    width: max-width;
+    display: block;
+    height: 700px;
+    overflow-y: auto;
+}
+
+td {
+    text-align: center;
+}
+
+table th:first-child {
+    position: sticky;
+    left: 0;
+}
+
+table th {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+.year-column {
+    position: sticky;
+    left: 0;
+    background: white;
+    font-weight: bold;
+}
+
