@@ -183,32 +183,36 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
+                    console.log(rows.length);
 
                     //Filling out energy counts dictionary for chart
-                    let energy_dict = {};
+                    let energy_dict = '{';
                     for(let i = 0; i < 51; i++) {
-                        let energy_counts = []
-                        for(let j = 0; j <= 58; j++) {
+                        let energy_counts_state = '' + rows[i].state_abbreviation + ': [';
+                        for(let j = i; j < rows.length; j += 51) {
                             switch(req.params.selected_energy_source){
                                 case 'coal':
-                                    energy_counts[j] = rows[j].coal;
+                                    energy_counts_state = energy_counts_state + rows[j].coal + ', ';
                                     break;
                                 case 'natural_gas':
-                                    energy_counts[j] = rows[j].natural_gas;
+                                    energy_counts_state = energy_counts_state + rows[j].natural_gas + ', ';
                                     break;
                                 case 'nuclear':
-                                    energy_counts[j] = rows[j].nuclear;
+                                    energy_counts_state = energy_counts_state + rows[j].nuclear + ', ';
                                     break;
                                 case 'petroleum':
-                                    energy_counts[j] = rows[j].petroleum;
+                                    energy_counts_state = energy_counts_state + rows[j].petroleum + ', ';
                                     break;
                                 case 'renewable':
-                                    energy_counts[j] = rows[j].renewable;
+                                    energy_counts_state = energy_counts_state + rows[j].renewable + ', ';
                                     break;            
                             }
                         }
-                        energy_dict[states[i].state_abbreviation] = energy_counts;
+                        energy_counts_state = energy_counts_state + ']';
+                        energy_dict = energy_dict + energy_counts_state + ', ';
                     }
+                    energy_dict = energy_dict + '};';
+
                     console.log(energy_dict);
 
                     let data_items = '';
