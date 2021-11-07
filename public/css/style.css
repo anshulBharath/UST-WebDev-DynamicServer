@@ -3,12 +3,23 @@
 /*html { overflow-y: scroll; overflow-x:hidden; }*/
 /*body { position: absolute; }*/
 
-.energy-table {
+.navbar {
+    font-size: 2em;
+}
+
+.energy-table-scroll {
     width: max-width;
     height: 700px;
     display: block;
     overflow-x: auto;
-    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.table-scroll {
+    width: max-width;
+    display: block;
+    height: 700px;
+    overflow-y: auto;
 }
 
 td {

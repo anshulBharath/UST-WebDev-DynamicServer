@@ -131,7 +131,7 @@ app.get('/state/:selected_state', (req, res) => {
                 }
 
                 response = response.replace("{{{Table}}}", list_items);
-                //res.status(200).type('html').send(response);
+                res.status(200).type('html').send(response);
             });
             
             
