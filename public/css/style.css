@@ -3,8 +3,18 @@
 /*html { overflow-y: scroll; overflow-x:hidden; }*/
 /*body { position: absolute; }*/
 
-.navbar {
+.navbar button{
     font-size: 2em;
+    font-weight: bold;
+}
+
+.navbar-home {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.navbar-span a {
+    font-size:1.25em;
 }
 
 .energy-table-scroll {
