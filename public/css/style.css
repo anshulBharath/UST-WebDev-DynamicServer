@@ -1,1 +1,8 @@
 /* Custom CSS Rules */
+
+html { overflow-y: scroll; overflow-x:hidden; }
+/*body { position: absolute; }*/
+
+td {
+    text-align: center;
+}

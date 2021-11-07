@@ -112,11 +112,13 @@ app.get('/state/:selected_state', (req, res) => {
         }
         else {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
-            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+            db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
-
+                
                 //Populating table
+                var yearlyTotal;
                 for(let i=0; i<rows.length; i++){
+                    yearlyTotal = rows[i].coal + rows[i].natural_gas + rows[i].nuclear + rows[i].petroleum + rows[i].renewable;
                     list_items += '<tr>\n';
                     list_items += '<td>' + rows[i].year + '</td>\n';
                     list_items += '<td>' + rows[i].coal + '</td>\n';
@@ -124,11 +126,12 @@ app.get('/state/:selected_state', (req, res) => {
                     list_items += '<td>' + rows[i].nuclear + '</td>\n';
                     list_items += '<td>' + rows[i].petroleum + '</td>\n';
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
+                    list_items += '<td>' + yearlyTotal + '</td>\n';
                     list_items += '</tr>\n';
                 }
 
                 response = response.replace("{{{Table}}}", list_items);
-                res.status(200).type('html').send(response);
+                //res.status(200).type('html').send(response);
             });
             
             
@@ -144,9 +147,30 @@ app.get('/energy/:selected_energy_source', (req, res) => {
         if(err) {
             res.status(404).send("Error: File Not Found");
         } else {
-            let response = template.replace('{{{ENERGY_TYPE}}}', req.params.selected_energy_source);
-            response = response.replace('{{{ENERGY}}}', req.params.selected_energy_source);
-
+            let response = template.replace('{{{Temp}}}', req.params.selected_energy_source);
+            switch(req.params.selected_energy_source){
+                case 'coal':
+                    response = template.replace('{{{ENERGY_TYPE}}}', 'Coal');
+                    response = response.replace('{{{ENERGY}}}', 'Coal');
+                    break;
+                case 'natural_gas':
+                    response = template.replace('{{{ENERGY_TYPE}}}', 'Natural Gas');
+                    response = response.replace('{{{ENERGY}}}', 'Natural Gas');
+                    break;
+                case 'nuclear':
+                    response = template.replace('{{{ENERGY_TYPE}}}', 'Nuclear');
+                    response = response.replace('{{{ENERGY}}}', 'Nuclear');
+                    break;
+                case 'petroleum':
+                    response = template.replace('{{{ENERGY_TYPE}}}', 'Petroleum');
+                    response = response.replace('{{{ENERGY}}}', 'Petroleum');
+                    break;
+                case 'renewable':
+                    response = template.replace('{{{ENERGY_TYPE}}}', 'Renewable');
+                    response = response.replace('{{{ENERGY}}}', 'Renewable');
+                    break;            
+            }
+            
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
                 let list_items = '';
