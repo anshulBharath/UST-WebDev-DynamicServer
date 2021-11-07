@@ -183,7 +183,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
-                    console.log(rows.length);
+                    //console.log(rows.length);
 
                     //Filling out energy counts dictionary for chart
                     let energy_dict = '{';
@@ -192,28 +192,55 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         for(let j = i; j < rows.length; j += 51) {
                             switch(req.params.selected_energy_source){
                                 case 'coal':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].coal;
+                                        break;
+                                    }
                                     energy_counts_state = energy_counts_state + rows[j].coal + ', ';
                                     break;
                                 case 'natural_gas':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].natural_gas;
+                                        break;
+                                    }
                                     energy_counts_state = energy_counts_state + rows[j].natural_gas + ', ';
                                     break;
                                 case 'nuclear':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].nuclear;
+                                        break;
+                                    }
                                     energy_counts_state = energy_counts_state + rows[j].nuclear + ', ';
                                     break;
                                 case 'petroleum':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].petroleum;
+                                        break;
+                                    }
                                     energy_counts_state = energy_counts_state + rows[j].petroleum + ', ';
                                     break;
                                 case 'renewable':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].renewable;
+                                        break;
+                                    }
                                     energy_counts_state = energy_counts_state + rows[j].renewable + ', ';
                                     break;            
                             }
                         }
                         energy_counts_state = energy_counts_state + ']';
+                        if(i === 50) { 
+                            energy_dict = energy_dict + energy_counts_state;
+                            break; 
+                        }
+
                         energy_dict = energy_dict + energy_counts_state + ', ';
                     }
-                    energy_dict = energy_dict + '};';
+                    energy_dict = energy_dict + '}';
 
-                    console.log(energy_dict);
+                    response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
+
+                    //console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
