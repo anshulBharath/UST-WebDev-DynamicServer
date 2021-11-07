@@ -170,7 +170,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     response = response.replace('{{{ENERGY}}}', 'Renewable');
                     break;            
             }
-            
+
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
                 let list_items = '';
@@ -190,7 +190,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     //loops through the years to set the first column
                     for(let i = 1960; i <= 2018; i++) {
                         data_items += '<tr>\n';
-                        data_items += '<td>' + i + '</td>\n';
+                        data_items += '<td class="year-column">' + i + '</td>\n';
                     
                         for(let i=0; i<51; i++){
                             switch(req.params.selected_energy_source){

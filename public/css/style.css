@@ -1,8 +1,35 @@
 /* Custom CSS Rules */
 
-html { overflow-y: scroll; overflow-x:hidden; }
+/*html { overflow-y: scroll; overflow-x:hidden; }*/
 /*body { position: absolute; }*/
+
+.energy-table {
+    width: max-width;
+    height: 700px;
+    display: block;
+    overflow-x: auto;
+    overflow-x: auto;
+}
 
 td {
     text-align: center;
 }
+
+table th:first-child {
+    position: sticky;
+    left: 0;
+}
+
+table th {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+.year-column {
+    position: sticky;
+    left: 0;
+    background: white;
+    font-weight: bold;
+}
+

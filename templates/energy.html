@@ -155,12 +155,13 @@
           </div>
       </div>
 
-    <!-- create template here -->
-        <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
-
+    <!-- create template here --> 
+    <div class="grid-container">
         <div class = "grid-x grid-padding-x">
+            <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
+
             <div class="cell">
-                <table>
+                <table class="energy-table">
                     <tr>
                         <th>Year</th>
                         <!--Fill in States-->
@@ -168,9 +169,10 @@
                     </tr>
 
                         {{{TABLE_DATA}}}
-    
+
                 </table>
             </div>
-        </div>   
+        </div>  
+    </div>     
 </body>
 </html>
