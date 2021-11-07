@@ -174,19 +174,45 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
                 let list_items = '';
-                    for(let i = 0; i < states.length; i++) {
-                        list_items += '<th>' + states[i].state_abbreviation + '</th>';
-                    }
-                    response = response.replace('{{{STATE_ABB}}}', list_items);
+                for(let i = 0; i < states.length; i++) {
+                    list_items += '<th>' + states[i].state_abbreviation + '</th>';
+                }
+                response = response.replace('{{{STATE_ABB}}}', list_items);
 
                 //Had to SELECT * here because the ? mark syntax was not working here for some reason
                 let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
 
+                    //Filling out energy counts dictionary for chart
+                    let energy_dict = {};
+                    for(let i = 0; i < 51; i++) {
+                        let energy_counts = []
+                        for(let j = 0; j <= 58; j++) {
+                            switch(req.params.selected_energy_source){
+                                case 'coal':
+                                    energy_counts[j] = rows[j].coal;
+                                    break;
+                                case 'natural_gas':
+                                    energy_counts[j] = rows[j].natural_gas;
+                                    break;
+                                case 'nuclear':
+                                    energy_counts[j] = rows[j].nuclear;
+                                    break;
+                                case 'petroleum':
+                                    energy_counts[j] = rows[j].petroleum;
+                                    break;
+                                case 'renewable':
+                                    energy_counts[j] = rows[j].renewable;
+                                    break;            
+                            }
+                        }
+                        energy_dict[states[i].state_abbreviation] = energy_counts;
+                    }
+                    console.log(energy_dict);
+
                     let data_items = '';
                     let rowCount=0 //Running count of the row
-
                     //loops through the years to set the first column
                     for(let i = 1960; i <= 2018; i++) {
                         data_items += '<tr>\n';
