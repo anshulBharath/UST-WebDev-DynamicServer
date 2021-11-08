@@ -4,7 +4,9 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>US Energy Consumption</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Our Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
 
     <!-- Open-Source Stylesheets -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -13,152 +15,162 @@
     <script type="application/javascript">
         // `energy_type` and object of consumption per year per state => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
+        // {{{TEMP}}}
         var energy_type = {{{ENERGY_TYPE}}};
         var energy_counts = {{{ENERGY_COUNTS}}}; // dictionary of arrays (e.g. {AK: [...], AL: [...], AR: [...], ...})
+        var years_array = {{{YEAR_ARRAY}}}; //An list of the years from 1960-2018
+
     </script>
+
+    <!-- Open Source Scripts-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 
-    <div class="w3-bar w3-light-grey">
-        <a href="#" class="w3-bar-item w3-button">Home</a>
-        <div class="w3-dropdown-hover">
-          <button class="w3-button">Energy Source</button>
-          <div class="w3-dropdown-content w3-bar-block w3-card-4">
-            <a href="/energy/coal" class="w3-bar-item w3-button">Coal</a>
-            <a href="/energy/natural_gas" class="w3-bar-item w3-button">Natural Gas</a>
-            <a href="/energy/nuclear" class="w3-bar-item w3-button">Nuclear</a>
-            <a href="/energy/petroleum" class="w3-bar-item w3-button">Petroleum</a>
-            <a href="/energy/renewable" class="w3-bar-item w3-button">Renewable</a>
-          </div>
-        </div>
-        <div class="w3-dropdown-hover">
-          <button class="w3-button">States</button>
-          <div class="w3-dropdown-content w3-bar-block w3-card-4">
-            <a href="/state/AK" class="w3-bar-item w3-button">Alaksa</a>
-            <a href="/state/AL" class="w3-bar-item w3-button">Alabama</a>
-            <a href="/state/AR" class="w3-bar-item w3-button">Arkansas</a>
-            <a href="/state/AZ" class="w3-bar-item w3-button">Arizona</a>
-            <a href="/state/CA" class="w3-bar-item w3-button">California</a>
-            <a href="/state/CO" class="w3-bar-item w3-button">Colorado</a>
-            <a href="/state/CT" class="w3-bar-item w3-button">Connecticut</a>
-            <a href="/state/DC" class="w3-bar-item w3-button">Washingtion D.C</a>
-            <a href="/state/DE" class="w3-bar-item w3-button">Deleware</a>
-            <a href="/state/DE" class="w3-bar-item w3-button">Minnesota</a>
-            <a href="/state/FL" class="w3-bar-item w3-button">Florida</a>
-            <a href="/state/GA" class="w3-bar-item w3-button">Georgia</a>
-            <a href="/state/HI" class="w3-bar-item w3-button">Hawaii</a>
-            <a href="/state/IA" class="w3-bar-item w3-button">Iowa</a>
-            <a href="/state/ID" class="w3-bar-item w3-button">Idaho</a>
-            <a href="/state/IL" class="w3-bar-item w3-button">Illinois</a>
-            <a href="/state/IN" class="w3-bar-item w3-button">Indiana</a>
-            <a href="/state/KS" class="w3-bar-item w3-button">Kansas</a>
-            <a href="/state/KY" class="w3-bar-item w3-button">Kentucky</a>
-            <a href="/state/LA" class="w3-bar-item w3-button">Louisiana</a>
-            <a href="/state/MA" class="w3-bar-item w3-button">Massachusetts</a>
-            <a href="/state/MD" class="w3-bar-item w3-button">Maryland</a>
-            <a href="/state/ME" class="w3-bar-item w3-button">Maine</a>
-            <a href="/state/MI" class="w3-bar-item w3-button">Michigan</a>
-            <a href="/state/MO" class="w3-bar-item w3-button">Missouri</a>
-            <a href="/state/MS" class="w3-bar-item w3-button">Mississippi</a>
-            <a href="/state/MT" class="w3-bar-item w3-button">Montana</a>
-            <a href="/state/NC" class="w3-bar-item w3-button">North Carolina</a>
-            <a href="/state/ND" class="w3-bar-item w3-button">North Dakota</a>
-            <a href="/state/NE" class="w3-bar-item w3-button">Nebraska</a>
-            <a href="/state/NH" class="w3-bar-item w3-button">New Hampshire</a>
-            <a href="/state/NJ" class="w3-bar-item w3-button">New Jersey</a>
-            <a href="/state/NM" class="w3-bar-item w3-button">New Mexico</a>
-            <a href="/state/NV" class="w3-bar-item w3-button">Nevada</a>
-            <a href="/state/NY" class="w3-bar-item w3-button">New York</a>
-            <a href="/state/OH" class="w3-bar-item w3-button">Ohio</a>
-            <a href="/state/OK" class="w3-bar-item w3-button">Oklahoma</a>
-            <a href="/state/OR" class="w3-bar-item w3-button">Oregon</a>
-            <a href="/state/PA" class="w3-bar-item w3-button">Pennsylvania</a>
-            <a href="/state/RI" class="w3-bar-item w3-button">Rhode Island</a>
-            <a href="/state/SC" class="w3-bar-item w3-button">South Carolina</a>
-            <a href="/state/SD" class="w3-bar-item w3-button">South Dakota</a>
-            <a href="/state/TN" class="w3-bar-item w3-button">Tennessee</a>
-            <a href="/state/TX" class="w3-bar-item w3-button">Texas</a>
-            <a href="/state/UT" class="w3-bar-item w3-button">Utah</a>
-            <a href="/state/VA" class="w3-bar-item w3-button">Virginia</a>
-            <a href="/state/VT" class="w3-bar-item w3-button">Vermont</a>
-            <a href="/state/WA" class="w3-bar-item w3-button">Washington</a>
-            <a href="/state/WI" class="w3-bar-item w3-button">Wisconsin</a>
-            <a href="/state/WV" class="w3-bar-item w3-button">West Virginia</a>
-            <a href="/state/WY" class="w3-bar-item w3-button">Wyoming</a>
-          </div>
-        </div>
-        <div class="w3-dropdown-hover">
-            <button class="w3-button">Years</button>
+    <!-- Site Navigation -->
+    <div class="w3-light-grey navbar">
+        <a href="#" s class="w3-bar-item w3-button navbar-home">Home</a>
+        </span class="navbar-span">
+            <div class="w3-dropdown-hover">
+            <button class="w3-button">Energy Source</button>
             <div class="w3-dropdown-content w3-bar-block w3-card-4">
-              <a href="/year/1960" class="w3-bar-item w3-button">1960</a>
-              <a href="/year/1961" class="w3-bar-item w3-button">1961</a>
-              <a href="/year/1962" class="w3-bar-item w3-button">1962</a>
-              <a href="/year/1963" class="w3-bar-item w3-button">1963</a>
-              <a href="/year/1964" class="w3-bar-item w3-button">1964</a>
-              <a href="/year/1965" class="w3-bar-item w3-button">1965</a>
-              <a href="/year/1966" class="w3-bar-item w3-button">1966</a>
-              <a href="/year/1967" class="w3-bar-item w3-button">1967</a>
-              <a href="/year/1968" class="w3-bar-item w3-button">1968</a>
-              <a href="/year/1969" class="w3-bar-item w3-button">1969</a>
-              <a href="/year/1970" class="w3-bar-item w3-button">1970</a>
-              <a href="/year/1971" class="w3-bar-item w3-button">1971</a>
-              <a href="/year/1972" class="w3-bar-item w3-button">1972</a>
-              <a href="/year/1973" class="w3-bar-item w3-button">1973</a>
-              <a href="/year/1974" class="w3-bar-item w3-button">1974</a>
-              <a href="/year/1975" class="w3-bar-item w3-button">1975</a>
-              <a href="/year/1976" class="w3-bar-item w3-button">1976</a>
-              <a href="/year/1977" class="w3-bar-item w3-button">1977</a>
-              <a href="/year/1978" class="w3-bar-item w3-button">1978</a>
-              <a href="/year/1979" class="w3-bar-item w3-button">1979</a>
-              <a href="/year/1980" class="w3-bar-item w3-button">1980</a>
-              <a href="/year/1981" class="w3-bar-item w3-button">1981</a>
-              <a href="/year/1982" class="w3-bar-item w3-button">1982</a>
-              <a href="/year/1983" class="w3-bar-item w3-button">1983</a>
-              <a href="/year/1984" class="w3-bar-item w3-button">1984</a>
-              <a href="/year/1985" class="w3-bar-item w3-button">1985</a>
-              <a href="/year/1986" class="w3-bar-item w3-button">1986</a>
-              <a href="/year/1987" class="w3-bar-item w3-button">1987</a>
-              <a href="/year/1988" class="w3-bar-item w3-button">1988</a>
-              <a href="/year/1989" class="w3-bar-item w3-button">1989</a>
-              <a href="/year/1990" class="w3-bar-item w3-button">1990</a>
-              <a href="/year/1991" class="w3-bar-item w3-button">1991</a>
-              <a href="/year/1992" class="w3-bar-item w3-button">1992</a>
-              <a href="/year/1993" class="w3-bar-item w3-button">1993</a>
-              <a href="/year/1994" class="w3-bar-item w3-button">1994</a>
-              <a href="/year/1995" class="w3-bar-item w3-button">1995</a>
-              <a href="/year/1996" class="w3-bar-item w3-button">1996</a>
-              <a href="/year/1997" class="w3-bar-item w3-button">1997</a>
-              <a href="/year/1998" class="w3-bar-item w3-button">1998</a>
-              <a href="/year/1999" class="w3-bar-item w3-button">1999</a>
-              <a href="/year/2000" class="w3-bar-item w3-button">2000</a>
-              <a href="/year/2001" class="w3-bar-item w3-button">2001</a>
-              <a href="/year/2002" class="w3-bar-item w3-button">2002</a>
-              <a href="/year/2003" class="w3-bar-item w3-button">2003</a>
-              <a href="/year/2004" class="w3-bar-item w3-button">2004</a>
-              <a href="/year/2005" class="w3-bar-item w3-button">2005</a>
-              <a href="/year/2006" class="w3-bar-item w3-button">2006</a>
-              <a href="/year/2007" class="w3-bar-item w3-button">2007</a>
-              <a href="/year/2008" class="w3-bar-item w3-button">2008</a>
-              <a href="/year/2009" class="w3-bar-item w3-button">2009</a>
-              <a href="/year/2010" class="w3-bar-item w3-button">2010</a>
-              <a href="/year/2011" class="w3-bar-item w3-button">2011</a>
-              <a href="/year/2012" class="w3-bar-item w3-button">2012</a>
-              <a href="/year/2013" class="w3-bar-item w3-button">2013</a>
-              <a href="/year/2014" class="w3-bar-item w3-button">2014</a>
-              <a href="/year/2015" class="w3-bar-item w3-button">2015</a>
-              <a href="/year/2016" class="w3-bar-item w3-button">2016</a>
-              <a href="/year/2017" class="w3-bar-item w3-button">2017</a>
-              <a href="/year/2018" class="w3-bar-item w3-button">2018</a>
+                <a href="/energy/coal" class="w3-bar-item w3-button">Coal</a>
+                <a href="/energy/natural_gas" class="w3-bar-item w3-button">Natural Gas</a>
+                <a href="/energy/nuclear" class="w3-bar-item w3-button">Nuclear</a>
+                <a href="/energy/petroleum" class="w3-bar-item w3-button">Petroleum</a>
+                <a href="/energy/renewable" class="w3-bar-item w3-button">Renewable</a>
             </div>
-          </div>
-      </div>
+            </div>
+            <div class="w3-dropdown-hover">
+            <button class="w3-button">States</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/state/AK" class="w3-bar-item w3-button">Alaksa</a>
+                <a href="/state/AL" class="w3-bar-item w3-button">Alabama</a>
+                <a href="/state/AR" class="w3-bar-item w3-button">Arkansas</a>
+                <a href="/state/AZ" class="w3-bar-item w3-button">Arizona</a>
+                <a href="/state/CA" class="w3-bar-item w3-button">California</a>
+                <a href="/state/CO" class="w3-bar-item w3-button">Colorado</a>
+                <a href="/state/CT" class="w3-bar-item w3-button">Connecticut</a>
+                <a href="/state/DC" class="w3-bar-item w3-button">Washingtion D.C</a>
+                <a href="/state/DE" class="w3-bar-item w3-button">Deleware</a>
+                <a href="/state/DE" class="w3-bar-item w3-button">Minnesota</a>
+                <a href="/state/FL" class="w3-bar-item w3-button">Florida</a>
+                <a href="/state/GA" class="w3-bar-item w3-button">Georgia</a>
+                <a href="/state/HI" class="w3-bar-item w3-button">Hawaii</a>
+                <a href="/state/IA" class="w3-bar-item w3-button">Iowa</a>
+                <a href="/state/ID" class="w3-bar-item w3-button">Idaho</a>
+                <a href="/state/IL" class="w3-bar-item w3-button">Illinois</a>
+                <a href="/state/IN" class="w3-bar-item w3-button">Indiana</a>
+                <a href="/state/KS" class="w3-bar-item w3-button">Kansas</a>
+                <a href="/state/KY" class="w3-bar-item w3-button">Kentucky</a>
+                <a href="/state/LA" class="w3-bar-item w3-button">Louisiana</a>
+                <a href="/state/MA" class="w3-bar-item w3-button">Massachusetts</a>
+                <a href="/state/MD" class="w3-bar-item w3-button">Maryland</a>
+                <a href="/state/ME" class="w3-bar-item w3-button">Maine</a>
+                <a href="/state/MI" class="w3-bar-item w3-button">Michigan</a>
+                <a href="/state/MO" class="w3-bar-item w3-button">Missouri</a>
+                <a href="/state/MS" class="w3-bar-item w3-button">Mississippi</a>
+                <a href="/state/MT" class="w3-bar-item w3-button">Montana</a>
+                <a href="/state/NC" class="w3-bar-item w3-button">North Carolina</a>
+                <a href="/state/ND" class="w3-bar-item w3-button">North Dakota</a>
+                <a href="/state/NE" class="w3-bar-item w3-button">Nebraska</a>
+                <a href="/state/NH" class="w3-bar-item w3-button">New Hampshire</a>
+                <a href="/state/NJ" class="w3-bar-item w3-button">New Jersey</a>
+                <a href="/state/NM" class="w3-bar-item w3-button">New Mexico</a>
+                <a href="/state/NV" class="w3-bar-item w3-button">Nevada</a>
+                <a href="/state/NY" class="w3-bar-item w3-button">New York</a>
+                <a href="/state/OH" class="w3-bar-item w3-button">Ohio</a>
+                <a href="/state/OK" class="w3-bar-item w3-button">Oklahoma</a>
+                <a href="/state/OR" class="w3-bar-item w3-button">Oregon</a>
+                <a href="/state/PA" class="w3-bar-item w3-button">Pennsylvania</a>
+                <a href="/state/RI" class="w3-bar-item w3-button">Rhode Island</a>
+                <a href="/state/SC" class="w3-bar-item w3-button">South Carolina</a>
+                <a href="/state/SD" class="w3-bar-item w3-button">South Dakota</a>
+                <a href="/state/TN" class="w3-bar-item w3-button">Tennessee</a>
+                <a href="/state/TX" class="w3-bar-item w3-button">Texas</a>
+                <a href="/state/UT" class="w3-bar-item w3-button">Utah</a>
+                <a href="/state/VA" class="w3-bar-item w3-button">Virginia</a>
+                <a href="/state/VT" class="w3-bar-item w3-button">Vermont</a>
+                <a href="/state/WA" class="w3-bar-item w3-button">Washington</a>
+                <a href="/state/WI" class="w3-bar-item w3-button">Wisconsin</a>
+                <a href="/state/WV" class="w3-bar-item w3-button">West Virginia</a>
+                <a href="/state/WY" class="w3-bar-item w3-button">Wyoming</a>
+            </div>
+            </div>
+            <div class="w3-dropdown-hover">
+                <button class="w3-button">Years</button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/year/1960" class="w3-bar-item w3-button">1960</a>
+                <a href="/year/1961" class="w3-bar-item w3-button">1961</a>
+                <a href="/year/1962" class="w3-bar-item w3-button">1962</a>
+                <a href="/year/1963" class="w3-bar-item w3-button">1963</a>
+                <a href="/year/1964" class="w3-bar-item w3-button">1964</a>
+                <a href="/year/1965" class="w3-bar-item w3-button">1965</a>
+                <a href="/year/1966" class="w3-bar-item w3-button">1966</a>
+                <a href="/year/1967" class="w3-bar-item w3-button">1967</a>
+                <a href="/year/1968" class="w3-bar-item w3-button">1968</a>
+                <a href="/year/1969" class="w3-bar-item w3-button">1969</a>
+                <a href="/year/1970" class="w3-bar-item w3-button">1970</a>
+                <a href="/year/1971" class="w3-bar-item w3-button">1971</a>
+                <a href="/year/1972" class="w3-bar-item w3-button">1972</a>
+                <a href="/year/1973" class="w3-bar-item w3-button">1973</a>
+                <a href="/year/1974" class="w3-bar-item w3-button">1974</a>
+                <a href="/year/1975" class="w3-bar-item w3-button">1975</a>
+                <a href="/year/1976" class="w3-bar-item w3-button">1976</a>
+                <a href="/year/1977" class="w3-bar-item w3-button">1977</a>
+                <a href="/year/1978" class="w3-bar-item w3-button">1978</a>
+                <a href="/year/1979" class="w3-bar-item w3-button">1979</a>
+                <a href="/year/1980" class="w3-bar-item w3-button">1980</a>
+                <a href="/year/1981" class="w3-bar-item w3-button">1981</a>
+                <a href="/year/1982" class="w3-bar-item w3-button">1982</a>
+                <a href="/year/1983" class="w3-bar-item w3-button">1983</a>
+                <a href="/year/1984" class="w3-bar-item w3-button">1984</a>
+                <a href="/year/1985" class="w3-bar-item w3-button">1985</a>
+                <a href="/year/1986" class="w3-bar-item w3-button">1986</a>
+                <a href="/year/1987" class="w3-bar-item w3-button">1987</a>
+                <a href="/year/1988" class="w3-bar-item w3-button">1988</a>
+                <a href="/year/1989" class="w3-bar-item w3-button">1989</a>
+                <a href="/year/1990" class="w3-bar-item w3-button">1990</a>
+                <a href="/year/1991" class="w3-bar-item w3-button">1991</a>
+                <a href="/year/1992" class="w3-bar-item w3-button">1992</a>
+                <a href="/year/1993" class="w3-bar-item w3-button">1993</a>
+                <a href="/year/1994" class="w3-bar-item w3-button">1994</a>
+                <a href="/year/1995" class="w3-bar-item w3-button">1995</a>
+                <a href="/year/1996" class="w3-bar-item w3-button">1996</a>
+                <a href="/year/1997" class="w3-bar-item w3-button">1997</a>
+                <a href="/year/1998" class="w3-bar-item w3-button">1998</a>
+                <a href="/year/1999" class="w3-bar-item w3-button">1999</a>
+                <a href="/year/2000" class="w3-bar-item w3-button">2000</a>
+                <a href="/year/2001" class="w3-bar-item w3-button">2001</a>
+                <a href="/year/2002" class="w3-bar-item w3-button">2002</a>
+                <a href="/year/2003" class="w3-bar-item w3-button">2003</a>
+                <a href="/year/2004" class="w3-bar-item w3-button">2004</a>
+                <a href="/year/2005" class="w3-bar-item w3-button">2005</a>
+                <a href="/year/2006" class="w3-bar-item w3-button">2006</a>
+                <a href="/year/2007" class="w3-bar-item w3-button">2007</a>
+                <a href="/year/2008" class="w3-bar-item w3-button">2008</a>
+                <a href="/year/2009" class="w3-bar-item w3-button">2009</a>
+                <a href="/year/2010" class="w3-bar-item w3-button">2010</a>
+                <a href="/year/2011" class="w3-bar-item w3-button">2011</a>
+                <a href="/year/2012" class="w3-bar-item w3-button">2012</a>
+                <a href="/year/2013" class="w3-bar-item w3-button">2013</a>
+                <a href="/year/2014" class="w3-bar-item w3-button">2014</a>
+                <a href="/year/2015" class="w3-bar-item w3-button">2015</a>
+                <a href="/year/2016" class="w3-bar-item w3-button">2016</a>
+                <a href="/year/2017" class="w3-bar-item w3-button">2017</a>
+                <a href="/year/2018" class="w3-bar-item w3-button">2018</a>
+                </div>
+            </div>
+        </span>        
+    </div>
 
-    <!-- create template here -->
-        <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
-
+    <!-- create template here --> 
+    <div class="grid-container">
         <div class = "grid-x grid-padding-x">
+            <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
             <div class="cell">
-                <table>
+                <table class="energy-table-scroll">
                     <tr>
                         <th>Year</th>
                         <!--Fill in States-->
@@ -166,9 +178,427 @@
                     </tr>
 
                         {{{TABLE_DATA}}}
-    
+
                 </table>
             </div>
-        </div>   
+        </div>  
+
+        <div class="cell">
+            <canvas id="myChart" width="500" height="500"></canvas>
+        </div>
+    </div>     
 </body>
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: years_array,
+        datasets: [
+            {
+            label: 'AK',
+            data: energy_counts.AK,
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AL',
+            data: energy_counts.AL,
+            borderColor: [
+                'rgba(253, 165, 3, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AR',
+            data: energy_counts.AR,
+            borderColor: [
+                'rgba(185, 115, 141, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AZ',
+            data: energy_counts.AZ,
+            borderColor: [
+                'rgba(164, 222, 133, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'CA',
+            data: energy_counts.CA,
+            borderColor: [
+                'rgba(243, 252, 119, 1)',
+            ],
+            tension: 0.1
+            },
+            {//Random start
+            label: 'CO',
+            data: energy_counts.C0,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'CT',
+            data: energy_counts.CT,
+            borderColor: [
+                'rgba(152, 177, 20, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'DC',
+            data: energy_counts.DC,
+            borderColor: [
+                'rgba(43, 197, 159, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'DE',
+            data: energy_counts.DE,
+            borderColor: [
+                'rgba(24, 166, 243, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'FL',
+            data: energy_counts.FL,
+            borderColor: [
+                'rgba(95, 34, 103, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'GA',
+            data: energy_counts.GA,
+            borderColor: [
+                'rgba(44, 245, 113, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'HI',
+            data: energy_counts.HI,
+            borderColor: [
+                'rgba(135, 175, 242, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IA',
+            data: energy_counts.IA,
+            borderColor: [
+                'rgba(41, 5, 123, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ID',
+            data: energy_counts.ID,
+            borderColor: [
+                'rgba(192, 123, 56, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IL',
+            data: energy_counts.IL,
+            borderColor: [
+                'rgba(251, 254, 3, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IN',
+            data: energy_counts.IN,
+            borderColor: [
+                'rgba(249, 79, 191, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'KS',
+            data: energy_counts.KS,
+            borderColor: [
+                'rgba(122, 186, 208, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'KY',
+            data: energy_counts.KY,
+            borderColor: [
+                'rgba(135, 34, 207, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'LA',
+            data: energy_counts.LA,
+            borderColor: [
+                'rgba(72, 178, 82, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MA',
+            data: energy_counts.MA,
+            borderColor: [
+                'rgba(15, 21, 92, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MD',
+            data: energy_counts.MD,
+            borderColor: [
+                'rgba(146, 0, 74, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ME',
+            data: energy_counts.ME,
+            borderColor: [
+                'rgba(41, 162, 203, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MI',
+            data: energy_counts.MI,
+            borderColor: [
+                'rgba(212, 65, 18, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MN',
+            data: energy_counts.MN,
+            borderColor: [
+                'rgba(165, 190, 233, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MO',
+            data: energy_counts.MS,
+            borderColor: [
+                'rgba(203, 212, 105, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MT',
+            data: energy_counts.MT,
+            borderColor: [
+                'rgba(203, 172, 101, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NC',
+            data: energy_counts.NC,
+            borderColor: [
+                'rgba(141, 69, 173, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ND',
+            data: energy_counts.ND,
+            borderColor: [
+                'rgba(167, 109, 132, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NE',
+            data: energy_counts.NE,
+            borderColor: [
+                'rgba(142, 167, 163, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NH',
+            data: energy_counts.NH,
+            borderColor: [
+                'rgba(176, 9, 50, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NJ',
+            data: energy_counts.NJ,
+            borderColor: [
+                'rgba(17, 192, 154, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NM',
+            data: energy_counts.NM,
+            borderColor: [
+                'rgba(213, 190, 138, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NV',
+            data: energy_counts.NV,
+            borderColor: [
+                'rgba(108, 152, 158, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NY',
+            data: energy_counts.NY,
+            borderColor: [
+                'rgba(250, 183, 178, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OH',
+            data: energy_counts.OH,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OK',
+            data: energy_counts.OK,
+            borderColor: [
+                'rgba(51, 19, 245, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OR',
+            data: energy_counts.OR,
+            borderColor: [
+                'rgba(103, 163, 54, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'PA',
+            data: energy_counts.PA,
+            borderColor: [
+                'rgba(153, 50, 50, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'RI',
+            data: energy_counts.RI,
+            borderColor: [
+                'rgba(219, 32, 227, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'SC',
+            data: energy_counts.SC,
+            borderColor: [
+                'rgba(15, 165, 102, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'SD',
+            data: energy_counts.SD,
+            borderColor: [
+                'rgba(196, 58, 29, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'TN',
+            data: energy_counts.TN,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'TX',
+            data: energy_counts.TX,
+            borderColor: [
+                'rgba(92, 71, 23, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'UT',
+            data: energy_counts.UT,
+            borderColor: [
+                'rgba(106, 132, 197, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'VA',
+            data: energy_counts.VA,
+            borderColor: [
+                'rgba(30, 127, 9, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'VT',
+            data: energy_counts.VT,
+            borderColor: [
+                'rgba(71, 154, 142, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WA',
+            data: energy_counts.WA,
+            borderColor: [
+                'rgba(212, 176, 155, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WI',
+            data: energy_counts.WI,
+            borderColor: [
+                'rgba(180, 154, 49, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WV',
+            data: energy_counts.WV,
+            borderColor: [
+                'rgba(26, 150, 28, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WY',
+            data: energy_counts.WY,
+            borderColor: [
+                'rgba(130, 137, 103, 1)',
+            ],
+            tension: 0.1
+            }
+        ]
+    }
+});
+</script>
+
 </html>
