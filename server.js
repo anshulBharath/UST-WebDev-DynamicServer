@@ -150,23 +150,23 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             let response = template.replace('{{{Temp}}}', req.params.selected_energy_source);
             switch(req.params.selected_energy_source){
                 case 'coal':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Coal');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Coal\'');
                     response = response.replace('{{{ENERGY}}}', 'Coal');
                     break;
                 case 'natural_gas':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Natural Gas');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Natural Gas\'');
                     response = response.replace('{{{ENERGY}}}', 'Natural Gas');
                     break;
                 case 'nuclear':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Nuclear');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Nuclear\'');
                     response = response.replace('{{{ENERGY}}}', 'Nuclear');
                     break;
                 case 'petroleum':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Petroleum');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Petroleum\'');
                     response = response.replace('{{{ENERGY}}}', 'Petroleum');
                     break;
                 case 'renewable':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Renewable');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Renewable\'');
                     response = response.replace('{{{ENERGY}}}', 'Renewable');
                     break;            
             }
@@ -240,15 +240,20 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                     response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
 
-                    //console.log(energy_dict);
+                    console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
+                    let yearArray = '[';
                     //loops through the years to set the first column
                     for(let i = 1960; i <= 2018; i++) {
                         data_items += '<tr>\n';
                         data_items += '<td class="year-column">' + i + '</td>\n';
-                    
+                        
+                        if(i<2018){
+                            yearArray = yearArray + i + ', ';
+                        }
+
                         for(let i=0; i<51; i++){
                             switch(req.params.selected_energy_source){
                                 case 'coal':
@@ -271,6 +276,10 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         }
                         data_items += '</tr>\n'; //End of row
                     }
+
+                    yearArray = yearArray + ' 2018];';
+
+                    response = response.replace('{{{YEAR_ARRAY}}}', yearArray);
                     response = response.replace('{{{TABLE_DATA}}}', data_items);
                     res.status(200).type('html').send(response); 
                 });
