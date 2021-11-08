@@ -112,13 +112,12 @@ app.get('/state/:selected_state', (req, res) => {
         }
         else {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
-            db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+            response = response.replace("{{{STATE}}}", "\"" + req.params.selected_state + "\"");
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
-                
+
                 //Populating table
-                var yearlyTotal;
                 for(let i=0; i<rows.length; i++){
-                    yearlyTotal = rows[i].coal + rows[i].natural_gas + rows[i].nuclear + rows[i].petroleum + rows[i].renewable;
                     list_items += '<tr>\n';
                     list_items += '<td>' + rows[i].year + '</td>\n';
                     list_items += '<td>' + rows[i].coal + '</td>\n';
@@ -126,17 +125,43 @@ app.get('/state/:selected_state', (req, res) => {
                     list_items += '<td>' + rows[i].nuclear + '</td>\n';
                     list_items += '<td>' + rows[i].petroleum + '</td>\n';
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
-                    list_items += '<td>' + yearlyTotal + '</td>\n';
                     list_items += '</tr>\n';
                 }
+
+                let coalTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    coalTotal += rows[i].coal;
+                }
+                response = response.replace("{{{COAL_COUNTS}}}", coalTotal);
+
+                let naturalGasTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    naturalGasTotal += rows[i].natural_gas;
+                }
+                response = response.replace("{{{NATURAL_GAS_COUNTS}}}", naturalGasTotal);
+
+                let nuclearTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    nuclearTotal += rows[i].nuclear;
+                }
+                response = response.replace("{{{NUCLEAR_COUNTS}}}", nuclearTotal);
+
+                let petroleumTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    petroleumTotal += rows[i].petroleum;
+                }
+                response = response.replace("{{{PETROLEUM_COUNTS}}}", petroleumTotal);
+
+                let renewableTotal = 0;
+                for(let i=0; i<rows.length; i++){
+                    renewableTotal += rows[i].renewable;
+                }
+                response = response.replace("{{{RENEWABLE_COUNTS}}}", renewableTotal);
 
                 response = response.replace("{{{Table}}}", list_items);
                 res.status(200).type('html').send(response);
             });
-            
-            
         }
-    
     });
 });
 
