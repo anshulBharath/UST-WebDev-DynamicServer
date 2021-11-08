@@ -150,23 +150,23 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             let response = template.replace('{{{Temp}}}', req.params.selected_energy_source);
             switch(req.params.selected_energy_source){
                 case 'coal':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Coal');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Coal\'');
                     response = response.replace('{{{ENERGY}}}', 'Coal');
                     break;
                 case 'natural_gas':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Natural Gas');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Natural Gas\'');
                     response = response.replace('{{{ENERGY}}}', 'Natural Gas');
                     break;
                 case 'nuclear':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Nuclear');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Nuclear\'');
                     response = response.replace('{{{ENERGY}}}', 'Nuclear');
                     break;
                 case 'petroleum':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Petroleum');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Petroleum\'');
                     response = response.replace('{{{ENERGY}}}', 'Petroleum');
                     break;
                 case 'renewable':
-                    response = template.replace('{{{ENERGY_TYPE}}}', 'Renewable');
+                    response = template.replace('{{{ENERGY_TYPE}}}', '\'Renewable\'');
                     response = response.replace('{{{ENERGY}}}', 'Renewable');
                     break;            
             }
@@ -174,24 +174,86 @@ app.get('/energy/:selected_energy_source', (req, res) => {
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
                 let list_items = '';
-                    for(let i = 0; i < states.length; i++) {
-                        list_items += '<th>' + states[i].state_abbreviation + '</th>';
-                    }
-                    response = response.replace('{{{STATE_ABB}}}', list_items);
+                for(let i = 0; i < states.length; i++) {
+                    list_items += '<th>' + states[i].state_abbreviation + '</th>';
+                }
+                response = response.replace('{{{STATE_ABB}}}', list_items);
 
                 //Had to SELECT * here because the ? mark syntax was not working here for some reason
                 let querry = 'SELECT year, state_abbreviation, ' +req.params.selected_energy_source+ ' FROM Consumption ORDER BY year, state_abbreviation';
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
+                    //console.log(rows.length);
+
+                    //Filling out energy counts dictionary for chart
+                    let energy_dict = '{';
+                    for(let i = 0; i < 51; i++) {
+                        let energy_counts_state = '' + rows[i].state_abbreviation + ': [';
+                        for(let j = i; j < rows.length; j += 51) {
+                            switch(req.params.selected_energy_source){
+                                case 'coal':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].coal;
+                                        break;
+                                    }
+                                    energy_counts_state = energy_counts_state + rows[j].coal + ', ';
+                                    break;
+                                case 'natural_gas':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].natural_gas;
+                                        break;
+                                    }
+                                    energy_counts_state = energy_counts_state + rows[j].natural_gas + ', ';
+                                    break;
+                                case 'nuclear':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].nuclear;
+                                        break;
+                                    }
+                                    energy_counts_state = energy_counts_state + rows[j].nuclear + ', ';
+                                    break;
+                                case 'petroleum':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].petroleum;
+                                        break;
+                                    }
+                                    energy_counts_state = energy_counts_state + rows[j].petroleum + ', ';
+                                    break;
+                                case 'renewable':
+                                    if(j === rows.length - (51 - i)) {
+                                        energy_counts_state = energy_counts_state + rows[j].renewable;
+                                        break;
+                                    }
+                                    energy_counts_state = energy_counts_state + rows[j].renewable + ', ';
+                                    break;            
+                            }
+                        }
+                        energy_counts_state = energy_counts_state + ']';
+                        if(i === 50) { 
+                            energy_dict = energy_dict + energy_counts_state;
+                            break; 
+                        }
+
+                        energy_dict = energy_dict + energy_counts_state + ', ';
+                    }
+                    energy_dict = energy_dict + '}';
+
+                    response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
+
+                    console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
-
+                    let yearArray = '[';
                     //loops through the years to set the first column
                     for(let i = 1960; i <= 2018; i++) {
                         data_items += '<tr>\n';
                         data_items += '<td class="year-column">' + i + '</td>\n';
-                    
+                        
+                        if(i<2018){
+                            yearArray = yearArray + i + ', ';
+                        }
+
                         for(let i=0; i<51; i++){
                             switch(req.params.selected_energy_source){
                                 case 'coal':
@@ -214,6 +276,10 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         }
                         data_items += '</tr>\n'; //End of row
                     }
+
+                    yearArray = yearArray + ' 2018];';
+
+                    response = response.replace('{{{YEAR_ARRAY}}}', yearArray);
                     response = response.replace('{{{TABLE_DATA}}}', data_items);
                     res.status(200).type('html').send(response); 
                 });

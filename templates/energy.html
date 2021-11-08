@@ -18,7 +18,13 @@
         // {{{TEMP}}}
         var energy_type = {{{ENERGY_TYPE}}};
         var energy_counts = {{{ENERGY_COUNTS}}}; // dictionary of arrays (e.g. {AK: [...], AL: [...], AR: [...], ...})
+        var years_array = {{{YEAR_ARRAY}}}; //An list of the years from 1960-2018
+
     </script>
+
+    <!-- Open Source Scripts-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 
@@ -163,7 +169,6 @@
     <div class="grid-container">
         <div class = "grid-x grid-padding-x">
             <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
-
             <div class="cell">
                 <table class="energy-table-scroll">
                     <tr>
@@ -177,6 +182,423 @@
                 </table>
             </div>
         </div>  
+
+        <div class="cell">
+            <canvas id="myChart" width="500" height="500"></canvas>
+        </div>
     </div>     
 </body>
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: years_array,
+        datasets: [
+            {
+            label: 'AK',
+            data: energy_counts.AK,
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AL',
+            data: energy_counts.AL,
+            borderColor: [
+                'rgba(253, 165, 3, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AR',
+            data: energy_counts.AR,
+            borderColor: [
+                'rgba(185, 115, 141, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'AZ',
+            data: energy_counts.AZ,
+            borderColor: [
+                'rgba(164, 222, 133, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'CA',
+            data: energy_counts.CA,
+            borderColor: [
+                'rgba(243, 252, 119, 1)',
+            ],
+            tension: 0.1
+            },
+            {//Random start
+            label: 'CO',
+            data: energy_counts.C0,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'CT',
+            data: energy_counts.CT,
+            borderColor: [
+                'rgba(152, 177, 20, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'DC',
+            data: energy_counts.DC,
+            borderColor: [
+                'rgba(43, 197, 159, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'DE',
+            data: energy_counts.DE,
+            borderColor: [
+                'rgba(24, 166, 243, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'FL',
+            data: energy_counts.FL,
+            borderColor: [
+                'rgba(95, 34, 103, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'GA',
+            data: energy_counts.GA,
+            borderColor: [
+                'rgba(44, 245, 113, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'HI',
+            data: energy_counts.HI,
+            borderColor: [
+                'rgba(135, 175, 242, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IA',
+            data: energy_counts.IA,
+            borderColor: [
+                'rgba(41, 5, 123, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ID',
+            data: energy_counts.ID,
+            borderColor: [
+                'rgba(192, 123, 56, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IL',
+            data: energy_counts.IL,
+            borderColor: [
+                'rgba(251, 254, 3, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'IN',
+            data: energy_counts.IN,
+            borderColor: [
+                'rgba(249, 79, 191, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'KS',
+            data: energy_counts.KS,
+            borderColor: [
+                'rgba(122, 186, 208, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'KY',
+            data: energy_counts.KY,
+            borderColor: [
+                'rgba(135, 34, 207, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'LA',
+            data: energy_counts.LA,
+            borderColor: [
+                'rgba(72, 178, 82, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MA',
+            data: energy_counts.MA,
+            borderColor: [
+                'rgba(15, 21, 92, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MD',
+            data: energy_counts.MD,
+            borderColor: [
+                'rgba(146, 0, 74, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ME',
+            data: energy_counts.ME,
+            borderColor: [
+                'rgba(41, 162, 203, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MI',
+            data: energy_counts.MI,
+            borderColor: [
+                'rgba(212, 65, 18, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MN',
+            data: energy_counts.MN,
+            borderColor: [
+                'rgba(165, 190, 233, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MO',
+            data: energy_counts.MS,
+            borderColor: [
+                'rgba(203, 212, 105, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'MT',
+            data: energy_counts.MT,
+            borderColor: [
+                'rgba(203, 172, 101, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NC',
+            data: energy_counts.NC,
+            borderColor: [
+                'rgba(141, 69, 173, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'ND',
+            data: energy_counts.ND,
+            borderColor: [
+                'rgba(167, 109, 132, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NE',
+            data: energy_counts.NE,
+            borderColor: [
+                'rgba(142, 167, 163, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NH',
+            data: energy_counts.NH,
+            borderColor: [
+                'rgba(176, 9, 50, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NJ',
+            data: energy_counts.NJ,
+            borderColor: [
+                'rgba(17, 192, 154, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NM',
+            data: energy_counts.NM,
+            borderColor: [
+                'rgba(213, 190, 138, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NV',
+            data: energy_counts.NV,
+            borderColor: [
+                'rgba(108, 152, 158, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'NY',
+            data: energy_counts.NY,
+            borderColor: [
+                'rgba(250, 183, 178, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OH',
+            data: energy_counts.OH,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OK',
+            data: energy_counts.OK,
+            borderColor: [
+                'rgba(51, 19, 245, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'OR',
+            data: energy_counts.OR,
+            borderColor: [
+                'rgba(103, 163, 54, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'PA',
+            data: energy_counts.PA,
+            borderColor: [
+                'rgba(153, 50, 50, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'RI',
+            data: energy_counts.RI,
+            borderColor: [
+                'rgba(219, 32, 227, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'SC',
+            data: energy_counts.SC,
+            borderColor: [
+                'rgba(15, 165, 102, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'SD',
+            data: energy_counts.SD,
+            borderColor: [
+                'rgba(196, 58, 29, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'TN',
+            data: energy_counts.TN,
+            borderColor: [
+                'rgba(50, 99, 50, 170)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'TX',
+            data: energy_counts.TX,
+            borderColor: [
+                'rgba(92, 71, 23, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'UT',
+            data: energy_counts.UT,
+            borderColor: [
+                'rgba(106, 132, 197, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'VA',
+            data: energy_counts.VA,
+            borderColor: [
+                'rgba(30, 127, 9, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'VT',
+            data: energy_counts.VT,
+            borderColor: [
+                'rgba(71, 154, 142, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WA',
+            data: energy_counts.WA,
+            borderColor: [
+                'rgba(212, 176, 155, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WI',
+            data: energy_counts.WI,
+            borderColor: [
+                'rgba(180, 154, 49, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WV',
+            data: energy_counts.WV,
+            borderColor: [
+                'rgba(26, 150, 28, 1)',
+            ],
+            tension: 0.1
+            },
+            {
+            label: 'WY',
+            data: energy_counts.WY,
+            borderColor: [
+                'rgba(130, 137, 103, 1)',
+            ],
+            tension: 0.1
+            }
+        ]
+    }
+});
+</script>
+
 </html>
