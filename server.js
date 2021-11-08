@@ -111,10 +111,12 @@ app.get('/state/:selected_state', (req, res) => {
             res.status(404).send("Error: File Not Found");
         }
         else {
-            let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
+            
             db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
                 
+                let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+
                 //Populating table
                 var yearlyTotal;
                 for(let i=0; i<rows.length; i++){
