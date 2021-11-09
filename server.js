@@ -117,10 +117,19 @@ app.get('/state/:selected_state', (req, res) => {
         else {
             
             db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+                let state_list = ['AK', 'AL', 'AR',	'AZ', 'CA',	'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA',	'ID', 'IL',	'IN', 'KS',	'KY','LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'];
+                let state_name = false;
+                let state_abbr = req.params.selected_state;
+                for(let i = 0; i < state_list.length; i++) {
+                    if(state_abbr.toLowerCase() === state_list[i].toLowerCase()) {
+                        state_name = true;
+                        break;
+                    }
+                }
+                if(err || state_name === false) {
+                    res.status(404).send("Error: Invalid State Name");
+                } else {
 
-                //if(err) {
-                    //res.status(404).send("Error: Invalid State Name");
-                //} else {
                 let list_items = '';
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
@@ -142,7 +151,7 @@ app.get('/state/:selected_state', (req, res) => {
 
                 response = response.replace("{{{Table}}}", list_items);
                 res.status(200).type('html').send(response);
-                //}
+                }
             });
         }
     });
