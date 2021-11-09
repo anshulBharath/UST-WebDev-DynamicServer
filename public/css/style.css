@@ -41,7 +41,7 @@ table th:first-child {
     left: 0;
 }
 
-table th {
+table th { 
     position: sticky;
     top: 0;
     background: white;
