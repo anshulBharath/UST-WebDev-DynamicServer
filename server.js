@@ -46,7 +46,7 @@ app.get('/year/:selected_year',(req, res) => {
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
-                if(err) {
+                if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960)) {
                     res.status(404).send("Error: Invalid Year");
                 } else {
 
@@ -118,35 +118,33 @@ app.get('/state/:selected_state', (req, res) => {
             
             db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
 
-                if(err) {
-                    res.status(404).send("Error: Invalid State Name");
-                } else {
-                    let list_items = '';
-                    let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                //if(err) {
+                    //res.status(404).send("Error: Invalid State Name");
+                //} else {
+                let list_items = '';
+                
+                let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
 
-                    //Populating table
-                    var yearlyTotal;
-                    for(let i=0; i<rows.length; i++){
-                        yearlyTotal = rows[i].coal + rows[i].natural_gas + rows[i].nuclear + rows[i].petroleum + rows[i].renewable;
-                        list_items += '<tr>\n';
-                        list_items += '<td>' + rows[i].year + '</td>\n';
-                        list_items += '<td>' + rows[i].coal + '</td>\n';
-                        list_items += '<td>' + rows[i].natural_gas + '</td>\n';
-                        list_items += '<td>' + rows[i].nuclear + '</td>\n';
-                        list_items += '<td>' + rows[i].petroleum + '</td>\n';
-                        list_items += '<td>' + rows[i].renewable + '</td>\n';
-                        list_items += '<td>' + yearlyTotal + '</td>\n';
-                        list_items += '</tr>\n';
-                    }
-
-                    response = response.replace("{{{Table}}}", list_items);
-                    res.status(200).type('html').send(response);
+                //Populating table
+                var yearlyTotal;
+                for(let i=0; i<rows.length; i++){
+                    yearlyTotal = rows[i].coal + rows[i].natural_gas + rows[i].nuclear + rows[i].petroleum + rows[i].renewable;
+                    list_items += '<tr>\n';
+                    list_items += '<td>' + rows[i].year + '</td>\n';
+                    list_items += '<td>' + rows[i].coal + '</td>\n';
+                    list_items += '<td>' + rows[i].natural_gas + '</td>\n';
+                    list_items += '<td>' + rows[i].nuclear + '</td>\n';
+                    list_items += '<td>' + rows[i].petroleum + '</td>\n';
+                    list_items += '<td>' + rows[i].renewable + '</td>\n';
+                    list_items += '<td>' + yearlyTotal + '</td>\n';
+                    list_items += '</tr>\n';
                 }
+
+                response = response.replace("{{{Table}}}", list_items);
+                res.status(200).type('html').send(response);
+                //}
             });
-            
-            
         }
-    
     });
 });
 
