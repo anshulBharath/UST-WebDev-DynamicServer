@@ -113,10 +113,8 @@ app.get('/state/:selected_state', (req, res) => {
         else {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
             response = response.replace("{{{STATE}}}", "\"" + req.params.selected_state + "\"");
-            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year ASC', [req.params.selected_state], (err, rows) =>{
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
-                
-                let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
 
                 //Populating table
                 for(let i=0; i<rows.length; i++){
@@ -211,10 +209,8 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
                     //console.log(rows.length);
-                    if(err) {
-                        res.status(404).send("Error: Invalid Energy Source");
-                    } else {
-                        //Filling out energy counts dictionary for chart
+
+                    //Filling out energy counts dictionary for chart
                     let energy_dict = '{';
                     for(let i = 0; i < 51; i++) {
                         let energy_counts_state = '' + rows[i].state_abbreviation + ': [';
@@ -269,7 +265,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                     response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
 
-                    //console.log(energy_dict);
+                    console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
@@ -311,7 +307,6 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     response = response.replace('{{{YEAR_ARRAY}}}', yearArray);
                     response = response.replace('{{{TABLE_DATA}}}', data_items);
                     res.status(200).type('html').send(response); 
-                    }
                 });
             });
         }
