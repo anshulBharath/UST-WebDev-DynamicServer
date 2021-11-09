@@ -118,6 +118,7 @@ app.get('/state/:selected_state', (req, res) => {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
             response = response.replace("{{{STATE}}}", req.params.selected_state);
             
+            
             db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year', [req.params.selected_state], (err, rows) =>{
                 let state_list = ['AK', 'AL', 'AR',	'AZ', 'CA',	'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA',	'ID', 'IL',	'IN', 'KS',	'KY','LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'];
                 let state_name = false;
@@ -135,6 +136,7 @@ app.get('/state/:selected_state', (req, res) => {
                 let list_items = '';
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                response = response.replace("{{{STATE_PIC}}}", req.params.selected_state);
                 
                 
                 let yearlyTotalArray = '[';
