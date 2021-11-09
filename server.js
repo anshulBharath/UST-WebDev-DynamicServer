@@ -115,8 +115,10 @@ app.get('/state/:selected_state', (req, res) => {
             res.status(404).send("Error: File Not Found");
         }
         else {
+            let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
+            response = response.replace("{{{STATE}}}", req.params.selected_state);
             
-            db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+            db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year', [req.params.selected_state], (err, rows) =>{
                 let state_list = ['AK', 'AL', 'AR',	'AZ', 'CA',	'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA',	'ID', 'IL',	'IN', 'KS',	'KY','LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'];
                 let state_name = false;
                 let state_abbr = req.params.selected_state;
@@ -133,9 +135,19 @@ app.get('/state/:selected_state', (req, res) => {
                 let list_items = '';
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                
+                
+                let yearlyTotalArray = '[';
+                let yearlyCoal = '[';
+                let yearlyNaturalGas = '[';
+                let yearlyNuclear = '[';
+                let yearlyPetroleum = '[';
+                let yearlyRenewable = '[';
+                let years = '[';
 
+
+                let yearlyTotal;
                 //Populating table
-                var yearlyTotal;
                 for(let i=0; i<rows.length; i++){
                     yearlyTotal = rows[i].coal + rows[i].natural_gas + rows[i].nuclear + rows[i].petroleum + rows[i].renewable;
                     list_items += '<tr>\n';
@@ -147,9 +159,39 @@ app.get('/state/:selected_state', (req, res) => {
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
                     list_items += '<td>' + yearlyTotal + '</td>\n';
                     list_items += '</tr>\n';
+
+                    if(i<rows.length-1){
+                        yearlyTotalArray = yearlyTotalArray + yearlyTotal + ', ';
+                        yearlyCoal = yearlyCoal + rows[i].coal + ', ';
+                        yearlyNaturalGas = yearlyNaturalGas + rows[i].natural_gas + ', ';
+                        yearlyNuclear = yearlyNuclear + rows[i].nuclear + ', ';
+                        yearlyPetroleum = yearlyPetroleum + rows[i].petroleum + ', ';
+                        yearlyRenewable = yearlyRenewable + rows[i].renewable + ', ';
+                        years = years + rows[i].year+ ', ';
+                    }
+                    else{
+                        yearlyTotalArray = yearlyTotalArray + yearlyTotal + ']';
+                        yearlyCoal = yearlyCoal + rows[i].coal + ']';
+                        yearlyNaturalGas = yearlyNaturalGas + rows[i].natural_gas + ']';
+                        yearlyNuclear = yearlyNuclear + rows[i].nuclear + ']';
+                        yearlyPetroleum = yearlyPetroleum + rows[i].petroleum + ']';
+                        yearlyRenewable = yearlyRenewable + rows[i].renewable + ']';
+                        years = years + rows[i].year+ ']';
+                    }
                 }
 
+                
+                response = response.replace("{{{COAL_COUNTS}}}", yearlyCoal);
+                response = response.replace("{{{NATURAL_GAS_COUNTS}}}", yearlyNaturalGas); 
+                response = response.replace("{{{NUCLEAR_COUNTS}}}", yearlyNuclear);
+                response = response.replace("{{{PETROLEUM_COUNTS}}}", yearlyPetroleum);
+                response = response.replace("{{{RENEWABLE_COUNTS}}}", yearlyRenewable);
+                response = response.replace("{{{YEARLY_TOTAL}}}", yearlyTotalArray);
+                response = response.replace("{{{YEAR_ARRAY}}}", years);
+
+
                 response = response.replace("{{{Table}}}", list_items);
+
                 res.status(200).type('html').send(response);
                 }
             });

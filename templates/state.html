@@ -11,17 +11,20 @@
     <!-- Open-Source Stylesheets -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="/css/foundation.css">
-
+    
     <script type="application/javascript">
         // `state` and arrays of consumption per year => set these variables equal to appropriate value
         //   * these variables will be defined and accessible from any script loaded after this one
-        var state = {{{STATE}}};
+        //var state = {{{STATE}}};
         var coal_counts = {{{COAL_COUNTS}}};               // array - value per year (e.g. [1234, 2567, ...])
         var natural_gas_counts = {{{NATURAL_GAS_COUNTS}}}; // array - value per year (e.g. [1234, 2567, ...])
         var nuclear_counts = {{{NUCLEAR_COUNTS}}};         // array - value per year (e.g. [1234, 2567, ...])
         var petroleum_counts = {{{PETROLEUM_COUNTS}}};     // array - value per year (e.g. [1234, 2567, ...])
         var renewable_counts = {{{RENEWABLE_COUNTS}}};     // array - value per year (e.g. [1234, 2567, ...])
+        var yearly_totals = {{{YEARLY_TOTAL}}};
+        var years_array = {{{YEAR_ARRAY}}};
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -184,7 +187,7 @@
             </div>
 
             <div class="cell">
-                <canvas id="myChart" width="200" height="200"></canvas>
+                <canvas id="myChart" width="700" height="700"></canvas>
             </div>
         </div>
 
@@ -192,7 +195,107 @@
     </div>
 </body>
 
+
 <script>
+    let coalArr = [];
+    let gasArr = [];
+    let nukeArr = [];
+    let petArr = [];
+    let renewArr = [];
+    for(let i=0; i<yearly_totals.length; i++){
+        coalArr.push(coal_counts[i]/yearly_totals[i]);
+        gasArr.push(natural_gas_counts[i]/yearly_totals[i]);
+        nukeArr.push(nuclear_counts[i]/yearly_totals[i]);
+        petArr.push(petroleum_counts[i]/yearly_totals[i]);
+        renewArr.push(renewable_counts[i]/yearly_totals[i]);
+    }
+        
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: years_array,
+            datasets: [
+                {
+                label: 'Coal',
+                data: coalArr,
+                borderColor: 'rgba(243, 252, 119, 1)',
+                backgroundColor: 'rgba(243, 252, 119, 1)',
+                fill: true
+                },
+                {
+                label: 'Natural Gas',
+                data: gasArr,
+                borderColor: 'rgba(135, 175, 242, 1)',
+                backgroundColor: 'rgba(135, 175, 242, 1)',
+                fill: true
+                },
+                {
+                label: 'Nuclear',
+                data: nukeArr,
+                borderColor: 'rgba(15, 21, 92, 1)',
+                backgroundColor: 'rgba(15, 21, 92, 1)',
+                fill: true
+                },
+                {
+                label: 'Petroleum',
+                data: petArr,
+                borderColor: 'rgba(108, 152, 158, 1)',
+                backgroundColor: 'rgba(108, 152, 158, 1)',
+                fill: true
+                },
+                {
+                label: 'Renewable',
+                data: renewArr,
+                borderColor: 'rgba(219, 32, 227, 1)',
+                backgroundColor: 'rgba(219, 32, 227, 1)',
+                fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: (ctx) => 'Chart.js Line Chart - stacked=' + ctx.chart.options.scales.y.stacked
+                },
+            tooltip: {
+                mode: 'index'
+            },
+            },
+            interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+            },
+            scales: {
+            x: {
+                title: {
+                display: true,
+                text: 'Month'
+                }
+            },
+            y: {
+                stacked: true,
+                title: {
+                display: true,
+                text: 'Value'
+                }
+            }
+            }
+        }
+    });
+</script>
+
+
+
+<!--
+<script>
+    function getPercentageArray(var, ){
+
+    }
+
     let ctx = document.getElementById('myChart');
     let myChart = new Chart(ctx, {
         type: 'pie',
@@ -200,7 +303,7 @@
             labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
             datasets: [{
                 label: 'Total US Consumption By Energy Source',
-                data: [coal_count, natural_gas_count, nuclear_count, petroleum_count, renewable_count],
+                data: [coal_counts, natural_gas_counts, nuclear_counts, petroleum_counts, renewable_counts],
                 backgroundColor: [
                 'rgb(255, 99, 132)',
                 'rgb(54, 162, 235)',
@@ -210,10 +313,11 @@
                 ],
                 hoverOffset: 4
             }]
+        },
+        options: {
+                    maintainAspectRatio: false,
         }
     });
 </script>
-
-
-</body>
+-->
 </html>
