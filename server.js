@@ -111,12 +111,25 @@ app.get('/state/:selected_state', (req, res) => {
             res.status(404).send("Error: File Not Found");
         }
         else {
+<<<<<<< Updated upstream
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
             response = response.replace("{{{STATE}}}", "\"" + req.params.selected_state + "\"");
             db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
 
                 //Populating table
+=======
+            
+            db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year', [req.params.selected_state], (err, rows) =>{
+                let list_items = '';
+                //res.send(rows);
+                
+                let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+
+                //Populating table
+                let yearlyTotal;
+                let yearlyTotalArray = '[';
+>>>>>>> Stashed changes
                 for(let i=0; i<rows.length; i++){
                     list_items += '<tr>\n';
                     list_items += '<td>' + rows[i].year + '</td>\n';
@@ -126,8 +139,16 @@ app.get('/state/:selected_state', (req, res) => {
                     list_items += '<td>' + rows[i].petroleum + '</td>\n';
                     list_items += '<td>' + rows[i].renewable + '</td>\n';
                     list_items += '</tr>\n';
+
+                    if(i<rows.length-1){
+                        yearlyTotalArray = yearlyTotalArray + yearlyTotal + ', ';
+                    }
+                    else{
+                        yearlyTotalArray = yearlyTotalArray + yearlyTotal + ']';
+                    }
                 }
 
+<<<<<<< Updated upstream
                 let coalTotal = 0;
                 for(let i=0; i<rows.length; i++){
                     coalTotal += rows[i].coal;
@@ -158,7 +179,11 @@ app.get('/state/:selected_state', (req, res) => {
                 }
                 response = response.replace("{{{RENEWABLE_COUNTS}}}", renewableTotal);
 
+=======
+                response = response.replace("{{{YEARLY_TOTAL}}}", yearlyTotalArray);
+>>>>>>> Stashed changes
                 response = response.replace("{{{Table}}}", list_items);
+
                 res.status(200).type('html').send(response);
             });
         }
