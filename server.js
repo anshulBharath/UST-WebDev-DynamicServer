@@ -113,7 +113,7 @@ app.get('/state/:selected_state', (req, res) => {
         else {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
             response = response.replace("{{{STATE}}}", "\"" + req.params.selected_state + "\"");
-            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year DESC', [req.params.selected_state], (err, rows) =>{
+            db.all('SELECT year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE state_abbreviation = ? ORDER BY year ASC', [req.params.selected_state], (err, rows) =>{
                 let list_items = '';
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
