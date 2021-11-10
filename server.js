@@ -45,6 +45,26 @@ app.get('/year/:selected_year',(req, res) => {
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
+
+            let nextYear = parseInt(req.params.selected_year) + 1;
+            let prevYear = parseInt(req.params.selected_year) - 1;
+
+            if(nextYear > 2018){
+                response = response.replace("{{{NEXT_VISIBLE}}}", "hidden");
+            }
+            else{
+                response = response.replace("{{{NEXT_VISIBLE}}}", "visible");
+                response = response.replace("{{{NEXT_YEAR}}}", nextYear);
+            }
+
+            if(prevYear < 1960){
+                response = response.replace("{{{PREV_VISIBLE}}}", "hidden");
+            }
+            else{
+                response = response.replace("{{{PREV_VISIBLE}}}", "visible");
+                response = response.replace("{{{PREV_YEAR}}}", prevYear);
+            }
+
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
                 if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960)) {
                     res.status(404).send("Error: Invalid Year");
@@ -118,6 +138,7 @@ app.get('/state/:selected_state', (req, res) => {
             let response = template.replace("{{{STATE_NAME}}}", req.params.selected_state);
             response = response.replace("{{{STATE}}}", req.params.selected_state);
             
+            
             db.all('SELECT state_name, year, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption NATURAL JOIN States WHERE state_abbreviation = ? ORDER BY year', [req.params.selected_state], (err, rows) =>{
                 let state_list = ['AK', 'AL', 'AR',	'AZ', 'CA',	'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA',	'ID', 'IL',	'IN', 'KS',	'KY','LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'];
                 let state_name = false;
@@ -135,6 +156,7 @@ app.get('/state/:selected_state', (req, res) => {
                 let list_items = '';
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                response = response.replace("{{{STATE_PIC}}}", req.params.selected_state);
                 
                 
                 let yearlyTotalArray = '[';
