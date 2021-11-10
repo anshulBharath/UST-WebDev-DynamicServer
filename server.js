@@ -291,6 +291,42 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
+                let energyType_array = ['coal', 'natural_gas', 'nuclear', 'petroleum', 'renewable'];
+                
+                count = 0;
+                for(let i = 0; i < energyType_array.length; i++) {
+                    if(req.params.selected_energy_source == energyType_array[i]) {
+                        count = i;
+                    }
+                }
+                response = response.replace("{{{COUNT}}}", count);
+
+                let finalNext = '""';
+                let finalPrev = '""';
+                let visibilityNext = 'visible';
+                let visibilityPrev = 'visible';
+                
+                if(count < 4) {
+                    let next = energyType_array[count + 1];
+                    finalNext = '"/energy/' + next + '"';
+                } else {
+                    visibilityNext = 'hidden';
+                }
+
+                if(count > 0) {
+                    let prev = energyType_array[count-1];
+                    finalPrev = '"/energy/' + prev + '"';
+                } else {
+                    visibilityPrev = 'hidden';
+                }
+
+                response = response.replace('{{{P}}}', visibilityPrev);  
+                response = response.replace('{{{N}}}', visibilityNext);              
+                
+                response = response.replace('{{{PREV}}}', finalPrev);
+
+                response = response.replace('{{{NEXT}}}', finalNext);
+
                 let list_items = '';
                 for(let i = 0; i < states.length; i++) {
                     list_items += '<th>' + states[i].state_abbreviation + '</th>';
