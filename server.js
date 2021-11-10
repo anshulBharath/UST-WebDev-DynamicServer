@@ -30,7 +30,22 @@ app.use(express.static(public_dir));
 
 // GET request handler for home page '/' (redirect to /year/2018)
 app.get('/', (req, res) => {
-    res.redirect('/year/2018');
+    res.redirect('/home');
+});
+
+app.get('/home',(req, res) => {
+    console.log(req.params.selected_year);
+    fs.readFile(path.join(template_dir, 'home.html'), 'utf-8', (err, page) => {
+        // modify `template` and send response
+        // this will require a query to the SQL database
+
+        if(err){
+            res.status(404).send("Error: File Not Found");
+        }
+        else { 
+            res.status(200).type('html').send(page);
+        }
+    });
 });
 
 // GET request handler for '/year/*'
