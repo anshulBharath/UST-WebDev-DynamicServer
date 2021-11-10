@@ -237,6 +237,8 @@
     }
         
     let ctx = document.getElementById('myChart').getContext('2d');
+    ctx.canvas.width = 300;
+    ctx.canvas.height = 100;
     let myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -245,36 +247,36 @@
                 {
                 label: 'Coal',
                 data: coalArr,
-                borderColor: 'rgba(243, 252, 119, 1)',
-                backgroundColor: 'rgba(243, 252, 119, 1)',
+                borderColor: 'black',
+                backgroundColor: 'gray',
                 fill: true
                 },
                 {
                 label: 'Natural Gas',
                 data: gasArr,
-                borderColor: 'rgba(135, 175, 242, 1)',
-                backgroundColor: 'rgba(135, 175, 242, 1)',
+                borderColor: 'black',
+                backgroundColor: 'rgba(107, 185, 240, 1)',
                 fill: true
                 },
                 {
                 label: 'Nuclear',
                 data: nukeArr,
-                borderColor: 'rgba(15, 21, 92, 1)',
-                backgroundColor: 'rgba(15, 21, 92, 1)',
+                borderColor: 'black',
+                backgroundColor: 'rgba(190, 144, 212,1)',
                 fill: true
                 },
                 {
                 label: 'Petroleum',
                 data: petArr,
-                borderColor: 'rgba(108, 152, 158, 1)',
-                backgroundColor: 'rgba(108, 152, 158, 1)',
+                borderColor: 'black',
+                backgroundColor: 'orange',
                 fill: true
                 },
                 {
                 label: 'Renewable',
                 data: renewArr,
-                borderColor: 'rgba(219, 32, 227, 1)',
-                backgroundColor: 'rgba(219, 32, 227, 1)',
+                borderColor: 'black',
+                backgroundColor: 'rgba(123, 239, 178, 1)',
                 fill: true
                 }
             ]
@@ -314,36 +316,4 @@
     });
 </script>
 
-
-
-<!--
-<script>
-    function getPercentageArray(var, ){
-
-    }
-
-    let ctx = document.getElementById('myChart');
-    let myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Coal', 'Natural Gas', 'Nuclear', 'Petroleum', 'Renewable'],
-            datasets: [{
-                label: 'Total US Consumption By Energy Source',
-                data: [coal_counts, natural_gas_counts, nuclear_counts, petroleum_counts, renewable_counts],
-                backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)',
-                'rgb(53, 47, 48)',
-                'rgb(44, 204, 185)'
-                ],
-                hoverOffset: 4
-            }]
-        },
-        options: {
-                    maintainAspectRatio: false,
-        }
-    });
-</script>
--->
 </html>
