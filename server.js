@@ -175,9 +175,9 @@ app.get('/state/:selected_state', (req, res) => {
 
                 let curYearIndex = state_list.indexOf(state_abbr);
                 let nextIndex = curYearIndex + 1;
-                console.log(nextIndex);
+    
                 let prevIndex = curYearIndex - 1;
-                console.log(prevIndex);
+
                 
                 if(nextIndex > 50){
                     response = response.replace("{{{NEXT_VISIBLE}}}", "hidden");
@@ -394,7 +394,6 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                     response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
 
-                    console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
