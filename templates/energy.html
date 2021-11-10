@@ -188,16 +188,19 @@
         
     </div>     
     <br />
-    <br />
-    <center>
-        <a id="linkPrev" href={{{PREV}}}>
-            <button id="prev" type="button" style="visibility: {{{P}}};">Previous</button>
-        </a>
-        
-        <a id="linkNext" href={{{NEXT}}}>
-            <button id="next" type="button" style="visibility: {{{N}}};">Next</button>
-        </a>   
-    </center>
+    
+    <div class="grid-x button-align">
+        <div class="cell auto" style="visibility: {{{P}}};">  
+            <a id="linkPrev" href={{{PREV}}}>
+                <button class="button-style" id="prev" type="button">Previous</button>
+            </a> 
+        </div>
+        <div class="cell auto" style="visibility: {{{N}}};">  
+            <a id="linkNext" href={{{NEXT}}}>
+                <button class="button-style" id="next" type="button">Next</button>
+            </a>   
+        </div>     
+    </div>
 </body>
 
 
