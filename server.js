@@ -157,6 +157,28 @@ app.get('/state/:selected_state', (req, res) => {
                 
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
                 response = response.replace("{{{STATE_PIC}}}", req.params.selected_state);
+
+                let curYearIndex = state_list.indexOf(state_abbr);
+                let nextIndex = curYearIndex + 1;
+                console.log(nextIndex);
+                let prevIndex = curYearIndex - 1;
+                console.log(prevIndex);
+                
+                if(nextIndex > 50){
+                    response = response.replace("{{{NEXT_VISIBLE}}}", "hidden");
+                }
+                else{
+                    response = response.replace("{{{NEXT_VISIBLE}}}", "visible");
+                    response = response.replace("{{{NEXT_YEAR}}}", state_list[nextIndex]);
+                }
+    
+                if(prevIndex< 0){
+                    response = response.replace("{{{PREV_VISIBLE}}}", "hidden");
+                }
+                else{
+                    response = response.replace("{{{PREV_VISIBLE}}}", "visible");
+                    response = response.replace("{{{PREV_YEAR}}}", state_list[prevIndex]);
+                }
                 
                 
                 let yearlyTotalArray = '[';
