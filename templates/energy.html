@@ -186,8 +186,21 @@
         <div class="cell">
             <canvas id="myChart" width="500" height="500"></canvas>
         </div>
+        
     </div>     
+    <br />
+    <br />
+    <center>
+        <a id="linkPrev" href={{{PREV}}}>
+            <button id="prev" type="button">Previous</button>
+        </a>
+        
+        <a id="linkNext" href={{{NEXT}}}>
+            <button id="next" type="button">Next</button>
+        </a>   
+    </center>
 </body>
+
 
 <script>
 const ctx = document.getElementById('myChart').getContext('2d');
