@@ -193,11 +193,24 @@
         <br>
         <br>
 
-        <a href='/year/2018'>
-            <button class="">
-                Next
-            </button>
-        </a>
+        <!-- Prev and next button -->
+        <div class="grid-x button-align">
+            <div class="cell auto" style="visibility: {{{PREV_VISIBLE}}};">  
+                <a href='/year/{{{PREV_YEAR}}}'>
+                    <button class="button-style">
+                        Prev
+                    </button>
+                </a>
+            </div>
+            <div class="cell auto" style="visibility: {{{NEXT_VISIBLE}}};">  
+                <a href='/year/{{{NEXT_YEAR}}}'>
+                    <button class="button-style">
+                        Next
+                    </button>
+                </a>
+            </div>     
+        </div>
+            
     </div>
 </body>
 
