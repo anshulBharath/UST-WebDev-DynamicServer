@@ -266,18 +266,25 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                 let finalNext = '""';
                 let finalPrev = '""';
+                let visibilityNext = 'visible';
+                let visibilityPrev = 'visible';
                 
                 if(count < 4) {
                     let next = energyType_array[count + 1];
                     finalNext = '"/energy/' + next + '"';
-                } 
+                } else {
+                    visibilityNext = 'hidden';
+                }
 
                 if(count > 0) {
                     let prev = energyType_array[count-1];
                     finalPrev = '"/energy/' + prev + '"';
-                } 
+                } else {
+                    visibilityPrev = 'hidden';
+                }
 
-                
+                response = response.replace('{{{P}}}', visibilityPrev);  
+                response = response.replace('{{{N}}}', visibilityNext);              
                 
                 response = response.replace('{{{PREV}}}', finalPrev);
 
