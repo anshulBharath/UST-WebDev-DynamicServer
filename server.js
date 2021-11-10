@@ -242,8 +242,8 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                         count = i;
                     }
                 }
-
                 response = response.replace("{{{COUNT}}}", count);
+
                 let finalNext = '""';
                 let finalPrev = '""';
                 
@@ -254,7 +254,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                 if(count > 0) {
                     let prev = energyType_array[count-1];
-                    finalNext = '"/energy/' + prev + '"';
+                    finalPrev = '"/energy/' + prev + '"';
                 } 
 
                 

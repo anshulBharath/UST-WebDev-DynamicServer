@@ -19,7 +19,19 @@
         var energy_type = {{{ENERGY_TYPE}}};
         var energy_counts = {{{ENERGY_COUNTS}}}; // dictionary of arrays (e.g. {AK: [...], AL: [...], AR: [...], ...})
         var years_array = {{{YEAR_ARRAY}}}; //An list of the years from 1960-2018
+        var count = {{{COUNT}}}
 
+        if(count === 4) {
+            document.getElementById('next').style.visibility = hidden;
+        } else {
+            document.getElementById('next').style.visibility = visible;
+        }
+
+        if(count === 0) {
+            document.getElementById('prev').style.visibility = hidden;
+        } else {
+            document.getElementById('prev').style.visibility = visible;
+        }
     </script>
 
     <!-- Open Source Scripts-->
