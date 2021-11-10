@@ -54,10 +54,10 @@ table th {
     font-weight: bold;
 }
 
-.GFG {
+.button-style{
     background-color: white;
     border: 2px solid black;
-    color: green;
+    color: darkblue;
     padding: 5px 10px;
     text-align: center;
     display: inline-block;
@@ -70,4 +70,10 @@ table th {
     margin: 10px auto 20px;
     display: block;
 }
+
+.button-align {
+    text-align: center;
+}
+
+
 
