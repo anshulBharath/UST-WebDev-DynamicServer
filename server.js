@@ -234,10 +234,8 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
             db.all('SELECT state_abbreviation FROM States',(err, states) => {
                 //Using state table to fill in state abreviation because of ordering of states when queried
-                let energyType_array = ['coal', 'natural_gas', 'nucelar', 'petroleum', 'renewable'];
-                let prevElem = document.getElementById('prev');
-                let nextElem = document.getElementById('next');
-
+                let energyType_array = ['coal', 'natural_gas', 'nuclear', 'petroleum', 'renewable'];
+                
                 count = 0;
                 for(let i = 0; i < energyType_array.length; i++) {
                     if(req.params.selected_energy_source == energyType_array[i]) {
@@ -245,23 +243,25 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     }
                 }
 
-                let next = '';
-                let prev = '';
-                if(count === 4) {
-                    prevElem.hidden = false;
-                    nextElem.hidden = true;
-                } else {
-                    next = energyType_array[count + 1];
-                }
+                response = response.replace("{{{COUNT}}}", count);
+                let finalNext = '""';
+                let finalPrev = '""';
+                
+                if(count < 4) {
+                    let next = energyType_array[count + 1];
+                    finalNext = '"/energy/' + next + '"';
+                } 
 
-                if(count === 0) {
-                    prevElem.hidden = true;
-                    nextElem.hidden = false;
-                } else {
-                    prev = energyType_array[count-1];
-                }
-                response = response.replace("{{{PREV}}}", prev);
-                response = response.replace("{{{NEXT}}}", next);
+                if(count > 0) {
+                    let prev = energyType_array[count-1];
+                    finalNext = '"/energy/' + prev + '"';
+                } 
+
+                
+                
+                response = response.replace('{{{PREV}}}', finalPrev);
+
+                response = response.replace('{{{NEXT}}}', finalNext);
 
                 let list_items = '';
                 for(let i = 0; i < states.length; i++) {
