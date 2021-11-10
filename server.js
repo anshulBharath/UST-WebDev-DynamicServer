@@ -45,6 +45,26 @@ app.get('/year/:selected_year',(req, res) => {
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
+
+            let nextYear = parseInt(req.params.selected_year) + 1;
+            let prevYear = parseInt(req.params.selected_year) - 1;
+
+            if(nextYear > 2018){
+                response = response.replace("{{{NEXT_VISIBLE}}}", "hidden");
+            }
+            else{
+                response = response.replace("{{{NEXT_VISIBLE}}}", "visible");
+                response = response.replace("{{{NEXT_YEAR}}}", nextYear);
+            }
+
+            if(prevYear < 1960){
+                response = response.replace("{{{PREV_VISIBLE}}}", "hidden");
+            }
+            else{
+                response = response.replace("{{{PREV_VISIBLE}}}", "visible");
+                response = response.replace("{{{PREV_YEAR}}}", prevYear);
+            }
+
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
                 if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960)) {
                     res.status(404).send("Error: Invalid Year");
