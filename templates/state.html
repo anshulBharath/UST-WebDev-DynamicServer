@@ -170,7 +170,7 @@
         <h1>Energy Consumption for state: <span style="font-weight: bold;">{{{STATE_NAME}}}</span> </h1>
 
         <img class="state-image" src="/images/USA.png" alt="USA Picture" width="400" height="300">
-        <img class="state-image" src="/images/{{{STATE_PIC}}}.png" alt="{{{STATE_NAME}}} Picture" width="400" height="300" style="margin-left: 7rem;">
+        <img class="state-image" src="/images/{{{STATE_PIC}}}.png" alt="{{{STATE_NAME}}} Picture" width="400" height="300" style="margin-left: 10rem;">
         
         <br>
         <br>
@@ -178,7 +178,7 @@
         <hr>
 
         <div class="grid-x grid-padding-x">
-            <h3>Energy Consumption by Year</h3>
+            <h3>Energy Consumption of {{{STATE_NAME}}} by Year</h3>
             <div class="cell table-scroll">
                 <table>
                     <tr>
@@ -290,7 +290,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: (ctx) => 'Percentage of Consumption per Year'
+                    text: (ctx) => "{{{STATE_NAME}}}'s Percentage of Consumption per Year"
                 },
             tooltip: {
                 mode: 'index'
