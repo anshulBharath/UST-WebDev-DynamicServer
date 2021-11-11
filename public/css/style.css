@@ -83,6 +83,14 @@ table th {
 hr {
     text-align: left;
 }
+.page-images {
+    border-style:solid;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left:auto;
+    margin-right:auto;
+}
+
 
 .home-labels {
     text-align: center;
