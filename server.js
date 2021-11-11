@@ -297,9 +297,10 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 for(let i = 0; i < energyType_array.length; i++) {
                     if(req.params.selected_energy_source == energyType_array[i]) {
                         count = i;
+                        break;
                     }
                 }
-                response = response.replace("{{{COUNT}}}", count);
+                response = response.replace("{{{ENERGY_IMAGE}}}", energyType_array[count] + ".png");
 
                 let finalNext = '""';
                 let finalPrev = '""';
@@ -394,7 +395,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
 
                     response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
 
-                    console.log(energy_dict);
+                    //console.log(energy_dict);
 
                     let data_items = '';
                     let rowCount=0 //Running count of the row
