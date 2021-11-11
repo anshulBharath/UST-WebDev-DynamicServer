@@ -177,12 +177,12 @@
         </div>
     </div>
 
-    <hr />
+    <hr>
 
     <!-- create template here --> 
     <div class="grid-container">
         <div class = "grid-x grid-padding-x">
-            <h1>Consumption Data for Energy Source: {{{ENERGY}}}</h1>
+            <h1>Consumption Data for Energy Source: <span style="font-weight: bold;">{{{ENERGY}}}</span></h1>
             <div class="cell">
                 <table class="energy-table-scroll">
                     <tr>
@@ -200,22 +200,20 @@
         <div class="cell">
             <canvas id="myChart" width="500" height="500"></canvas>
         </div>
-        
+
+        <div class="grid-x button-align">
+            <div class="cell auto" style="visibility: {{{P}}};">  
+                <a id="linkPrev" href={{{PREV}}}>
+                    <button class="button-style" id="prev">Prev</button>
+                </a> 
+            </div>
+            <div class="cell auto" style="visibility: {{{N}}};">  
+                <a id="linkNext" href={{{NEXT}}}>
+                    <button class="button-style" id="next">Next</button>
+                </a>   
+            </div>     
+        </div>       
     </div>  
-    <br />
-    
-    <div class="grid-x button-align">
-        <div class="cell auto" style="visibility: {{{P}}};">  
-            <a id="linkPrev" href={{{PREV}}}>
-                <button class="button-style" id="prev" type="button">Previous</button>
-            </a> 
-        </div>
-        <div class="cell auto" style="visibility: {{{N}}};">  
-            <a id="linkNext" href={{{NEXT}}}>
-                <button class="button-style" id="next" type="button">Next</button>
-            </a>   
-        </div>     
-    </div>
 </body>
 
 
@@ -627,7 +625,10 @@ const myChart = new Chart(ctx, {
             tension: 0.1
             }
         ]
-    }
+    },
+    options: {
+                    maintainAspectRatio: false,
+        }
 });
 </script>
 
