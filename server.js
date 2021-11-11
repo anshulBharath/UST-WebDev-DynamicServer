@@ -55,8 +55,8 @@ app.get('/year/:selected_year',(req, res) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
-        if(err){
-            res.status(404).send("Error: File Not Found");
+        if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960) || isNaN(req.params.selected_year) === true) {
+            res.status(404).send("Error: Invalid Year");
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
@@ -81,9 +81,7 @@ app.get('/year/:selected_year',(req, res) => {
             }
 
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
-                if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960)) {
-                    res.status(404).send("Error: Invalid Year");
-                } else {
+                
 
                 let list_items = '';
 
@@ -131,7 +129,6 @@ app.get('/year/:selected_year',(req, res) => {
 
                 response = response.replace("{{{Table}}}", list_items);
                 res.status(200).type('html').send(response);
-                }
             });
         }
     });
