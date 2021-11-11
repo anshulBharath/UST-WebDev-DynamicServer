@@ -55,8 +55,8 @@ app.get('/year/:selected_year',(req, res) => {
         // modify `template` and send response
         // this will require a query to the SQL database
 
-        if(err){
-            res.status(404).send("Error: File Not Found");
+        if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960) || isNaN(req.params.selected_year) === true) {
+            res.status(404).send("Error: Invalid Year");
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
@@ -81,9 +81,7 @@ app.get('/year/:selected_year',(req, res) => {
             }
 
             db.all('SELECT state_abbreviation, coal, natural_gas, nuclear, petroleum, renewable FROM Consumption WHERE year = ?;', [req.params.selected_year], (err, rows) =>{
-                if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960)) {
-                    res.status(404).send("Error: Invalid Year");
-                } else {
+                
 
                 let list_items = '';
 
@@ -131,7 +129,6 @@ app.get('/year/:selected_year',(req, res) => {
 
                 response = response.replace("{{{Table}}}", list_items);
                 res.status(200).type('html').send(response);
-                }
             });
         }
     });
@@ -343,104 +340,117 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                 db.all(querry,(err, rows) => {
                     //res.send(rows);
                     //console.log(rows.length);
+                    let sources = ['coal', 'natural_gas', 'nuclear', 'petroleum', 'renewable'];
+                    let contains = sources.indexOf(req.params.selected_energy_source);
 
-                    //Filling out energy counts dictionary for chart
-                    let energy_dict = '{';
-                    for(let i = 0; i < 51; i++) {
-                        let energy_counts_state = '' + rows[i].state_abbreviation + ': [';
-                        for(let j = i; j < rows.length; j += 51) {
-                            switch(req.params.selected_energy_source){
-                                case 'coal':
-                                    if(j === rows.length - (51 - i)) {
-                                        energy_counts_state = energy_counts_state + rows[j].coal;
-                                        break;
-                                    }
-                                    energy_counts_state = energy_counts_state + rows[j].coal + ', ';
-                                    break;
-                                case 'natural_gas':
-                                    if(j === rows.length - (51 - i)) {
-                                        energy_counts_state = energy_counts_state + rows[j].natural_gas;
-                                        break;
-                                    }
-                                    energy_counts_state = energy_counts_state + rows[j].natural_gas + ', ';
-                                    break;
-                                case 'nuclear':
-                                    if(j === rows.length - (51 - i)) {
-                                        energy_counts_state = energy_counts_state + rows[j].nuclear;
-                                        break;
-                                    }
-                                    energy_counts_state = energy_counts_state + rows[j].nuclear + ', ';
-                                    break;
-                                case 'petroleum':
-                                    if(j === rows.length - (51 - i)) {
-                                        energy_counts_state = energy_counts_state + rows[j].petroleum;
-                                        break;
-                                    }
-                                    energy_counts_state = energy_counts_state + rows[j].petroleum + ', ';
-                                    break;
-                                case 'renewable':
-                                    if(j === rows.length - (51 - i)) {
-                                        energy_counts_state = energy_counts_state + rows[j].renewable;
-                                        break;
-                                    }
-                                    energy_counts_state = energy_counts_state + rows[j].renewable + ', ';
-                                    break;            
-                            }
-                        }
-                        energy_counts_state = energy_counts_state + ']';
-                        if(i === 50) { 
-                            energy_dict = energy_dict + energy_counts_state;
-                            break; 
-                        }
-
-                        energy_dict = energy_dict + energy_counts_state + ', ';
-                    }
-                    energy_dict = energy_dict + '}';
-
-                    response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
-
-                    //console.log(energy_dict);
-
-                    let data_items = '';
-                    let rowCount=0 //Running count of the row
-                    let yearArray = '[';
-                    //loops through the years to set the first column
-                    for(let i = 1960; i <= 2018; i++) {
-                        data_items += '<tr>\n';
-                        data_items += '<td class="year-column">' + i + '</td>\n';
-                        
-                        if(i<2018){
-                            yearArray = yearArray + i + ', ';
-                        }
-
-                        for(let i=0; i<51; i++){
-                            switch(req.params.selected_energy_source){
-                                case 'coal':
-                                    data_items += '<td>' + rows[rowCount].coal+ '</td>\n';
-                                    break;
-                                case 'natural_gas':
-                                    data_items += '<td>' + rows[rowCount].natural_gas+ '</td>\n';
-                                    break;
-                                case 'nuclear':
-                                    data_items += '<td>' + rows[rowCount].nuclear+ '</td>\n';
-                                    break;
-                                case 'petroleum':
-                                    data_items += '<td>' + rows[rowCount].petroleum+ '</td>\n';
-                                    break;
-                                case 'renewable':
-                                    data_items += '<td>' + rows[rowCount].renewable+ '</td>\n';
-                                    break;            
-                            }
-                        rowCount++;
-                        }
-                        data_items += '</tr>\n'; //End of row
+                    let error = false;
+                    if(contains === -1){
+                        error = true;
                     }
 
-                    yearArray = yearArray + ' 2018];';
+                    if(err || error){
+                        res.status(404).send("Error: Invalid Energy source");
+                    }
+                    else {
 
-                    response = response.replace('{{{YEAR_ARRAY}}}', yearArray);
-                    response = response.replace('{{{TABLE_DATA}}}', data_items);
-                    res.status(200).type('html').send(response); 
+                        //Filling out energy counts dictionary for chart
+                        let energy_dict = '{';
+                        for(let i = 0; i < 51; i++) {
+                            let energy_counts_state = '' + rows[i].state_abbreviation + ': [';
+                            for(let j = i; j < rows.length; j += 51) {
+                                switch(req.params.selected_energy_source){
+                                    case 'coal':
+                                        if(j === rows.length - (51 - i)) {
+                                            energy_counts_state = energy_counts_state + rows[j].coal;
+                                            break;
+                                        }
+                                        energy_counts_state = energy_counts_state + rows[j].coal + ', ';
+                                        break;
+                                    case 'natural_gas':
+                                        if(j === rows.length - (51 - i)) {
+                                            energy_counts_state = energy_counts_state + rows[j].natural_gas;
+                                            break;
+                                        }
+                                        energy_counts_state = energy_counts_state + rows[j].natural_gas + ', ';
+                                        break;
+                                    case 'nuclear':
+                                        if(j === rows.length - (51 - i)) {
+                                            energy_counts_state = energy_counts_state + rows[j].nuclear;
+                                            break;
+                                        }
+                                        energy_counts_state = energy_counts_state + rows[j].nuclear + ', ';
+                                        break;
+                                    case 'petroleum':
+                                        if(j === rows.length - (51 - i)) {
+                                            energy_counts_state = energy_counts_state + rows[j].petroleum;
+                                            break;
+                                        }
+                                        energy_counts_state = energy_counts_state + rows[j].petroleum + ', ';
+                                        break;
+                                    case 'renewable':
+                                        if(j === rows.length - (51 - i)) {
+                                            energy_counts_state = energy_counts_state + rows[j].renewable;
+                                            break;
+                                        }
+                                        energy_counts_state = energy_counts_state + rows[j].renewable + ', ';
+                                        break;            
+                                }
+                            }
+                            energy_counts_state = energy_counts_state + ']';
+                            if(i === 50) { 
+                                energy_dict = energy_dict + energy_counts_state;
+                                break; 
+                            }
+
+                            energy_dict = energy_dict + energy_counts_state + ', ';
+                        }
+                        energy_dict = energy_dict + '}';
+
+                        response = response.replace('{{{ENERGY_COUNTS}}}', energy_dict);
+
+                        //console.log(energy_dict);
+
+                        let data_items = '';
+                        let rowCount=0 //Running count of the row
+                        let yearArray = '[';
+                        //loops through the years to set the first column
+                        for(let i = 1960; i <= 2018; i++) {
+                            data_items += '<tr>\n';
+                            data_items += '<td class="year-column">' + i + '</td>\n';
+                            
+                            if(i<2018){
+                                yearArray = yearArray + i + ', ';
+                            }
+
+                            for(let i=0; i<51; i++){
+                                switch(req.params.selected_energy_source){
+                                    case 'coal':
+                                        data_items += '<td>' + rows[rowCount].coal+ '</td>\n';
+                                        break;
+                                    case 'natural_gas':
+                                        data_items += '<td>' + rows[rowCount].natural_gas+ '</td>\n';
+                                        break;
+                                    case 'nuclear':
+                                        data_items += '<td>' + rows[rowCount].nuclear+ '</td>\n';
+                                        break;
+                                    case 'petroleum':
+                                        data_items += '<td>' + rows[rowCount].petroleum+ '</td>\n';
+                                        break;
+                                    case 'renewable':
+                                        data_items += '<td>' + rows[rowCount].renewable+ '</td>\n';
+                                        break;            
+                                }
+                            rowCount++;
+                            }
+                            data_items += '</tr>\n'; //End of row
+                        }
+
+                        yearArray = yearArray + ' 2018];';
+
+                        response = response.replace('{{{YEAR_ARRAY}}}', yearArray);
+                        response = response.replace('{{{TABLE_DATA}}}', data_items);
+                        res.status(200).type('html').send(response); 
+                    }
                 });
             });
         }
