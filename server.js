@@ -173,6 +173,8 @@ app.get('/state/:selected_state', (req, res) => {
                 let response = template.replace("{{{STATE_NAME}}}", rows[0].state_name);
                 response = response.replace("{{{STATE_PIC}}}", req.params.selected_state);
                 response = response.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                response = response.replace("{{{STATE_NAME}}}", rows[0].state_name);
+                response = response.replace("{{{STATE_NAME}}}", rows[0].state_name);
 
                 let curYearIndex = state_list.indexOf(state_abbr);
                 let nextIndex = curYearIndex + 1;
