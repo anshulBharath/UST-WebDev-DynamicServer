@@ -175,9 +175,9 @@ app.get('/state/:selected_state', (req, res) => {
 
                 let curYearIndex = state_list.indexOf(state_abbr);
                 let nextIndex = curYearIndex + 1;
-                console.log(nextIndex);
+    
                 let prevIndex = curYearIndex - 1;
-                console.log(prevIndex);
+
                 
                 if(nextIndex > 50){
                     response = response.replace("{{{NEXT_VISIBLE}}}", "hidden");
