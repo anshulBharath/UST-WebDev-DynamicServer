@@ -169,7 +169,8 @@
     <div class="grid-container">
         <h1>Energy Consumption for state: <span style="font-weight: bold;">{{{STATE_NAME}}}</span> </h1>
 
-        <img class="state-image" src="/images/{{{STATE_PIC}}}.png" alt="State Picture" width="400" height="300">
+        <img class="state-image" src="/images/{{{STATE_PIC}}}.png" alt="{{{STATE_NAME}}} Picture" width="400" height="300">
+
         <br>
         <br>
 
@@ -238,7 +239,7 @@
         
     let ctx = document.getElementById('myChart').getContext('2d');
     ctx.canvas.width = 300;
-    ctx.canvas.height = 100;
+    ctx.canvas.height = 200;
     let myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -247,35 +248,35 @@
                 {
                 label: 'Coal',
                 data: coalArr,
-                borderColor: 'black',
+                borderColor: 'gray',
                 backgroundColor: 'gray',
                 fill: true
                 },
                 {
                 label: 'Natural Gas',
                 data: gasArr,
-                borderColor: 'black',
+                borderColor: 'rgba(107, 185, 240, 1)',
                 backgroundColor: 'rgba(107, 185, 240, 1)',
                 fill: true
                 },
                 {
                 label: 'Nuclear',
                 data: nukeArr,
-                borderColor: 'black',
+                borderColor: 'rgba(190, 144, 212,1)',
                 backgroundColor: 'rgba(190, 144, 212,1)',
                 fill: true
                 },
                 {
                 label: 'Petroleum',
                 data: petArr,
-                borderColor: 'black',
+                borderColor: 'orange',
                 backgroundColor: 'orange',
                 fill: true
                 },
                 {
                 label: 'Renewable',
                 data: renewArr,
-                borderColor: 'black',
+                borderColor: 'rgba(123, 239, 178, 1)',
                 backgroundColor: 'rgba(123, 239, 178, 1)',
                 fill: true
                 }
@@ -286,7 +287,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: (ctx) => 'Chart.js Line Chart - stacked=' + ctx.chart.options.scales.y.stacked
+                    text: (ctx) => 'Percent Stacked Area Chart'
                 },
             tooltip: {
                 mode: 'index'
