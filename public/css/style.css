@@ -75,6 +75,14 @@ table th {
     text-align: center;
 }
 
+.custom-dropdown {
+    height: 500px;
+    overflow-y: auto;
+}
+
+hr {
+    text-align: left;
+}
 .page-images {
     border-style:solid;
     margin-top: 1rem;
@@ -84,4 +92,8 @@ table th {
 }
 
 
+.home-labels {
+    text-align: center;
+    font-weight: bold;
+}
 
