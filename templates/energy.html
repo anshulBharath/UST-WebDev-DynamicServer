@@ -177,7 +177,7 @@
         </div>
     </div>
 
-    <hr />
+    <hr>
 
     <!-- create template here --> 
     <div class="grid-container">
@@ -200,22 +200,20 @@
         <div class="cell">
             <canvas id="myChart" width="500" height="500"></canvas>
         </div>
-        
+
+        <div class="grid-x button-align">
+            <div class="cell auto" style="visibility: {{{P}}};">  
+                <a id="linkPrev" href={{{PREV}}}>
+                    <button class="button-style" id="prev">Prev</button>
+                </a> 
+            </div>
+            <div class="cell auto" style="visibility: {{{N}}};">  
+                <a id="linkNext" href={{{NEXT}}}>
+                    <button class="button-style" id="next">Next</button>
+                </a>   
+            </div>     
+        </div>       
     </div>  
-    <br />
-    
-    <div class="grid-x button-align">
-        <div class="cell auto" style="visibility: {{{P}}};">  
-            <a id="linkPrev" href={{{PREV}}}>
-                <button class="button-style" id="prev" type="button">Previous</button>
-            </a> 
-        </div>
-        <div class="cell auto" style="visibility: {{{N}}};">  
-            <a id="linkNext" href={{{NEXT}}}>
-                <button class="button-style" id="next" type="button">Next</button>
-            </a>   
-        </div>     
-    </div>
 </body>
 
 
