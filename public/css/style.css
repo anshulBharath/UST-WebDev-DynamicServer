@@ -80,3 +80,12 @@ table th {
     overflow-y: auto;
 }
 
+hr {
+    text-align: left;
+}
+
+.home-labels {
+    text-align: center;
+    font-weight: bold;
+}
+
