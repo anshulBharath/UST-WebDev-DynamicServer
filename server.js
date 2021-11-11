@@ -301,6 +301,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     }
                 }
                 response = response.replace("{{{ENERGY_IMAGE}}}", energyType_array[count] + ".png");
+                response = response.replace("{{{E}}}", energyType_array[count]);
 
                 let finalNext = '""';
                 let finalPrev = '""';
