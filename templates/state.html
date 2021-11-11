@@ -174,6 +174,8 @@
         <br>
         <br>
 
+        <hr>
+
         <div class="grid-x grid-padding-x">
             <h3>Energy Consumption by Year</h3>
             <div class="cell table-scroll">
@@ -287,7 +289,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: (ctx) => 'Percent Stacked Area Chart'
+                    text: (ctx) => 'Percentage of Consumption per Year'
                 },
             tooltip: {
                 mode: 'index'
@@ -299,19 +301,19 @@
             intersect: false
             },
             scales: {
-            x: {
-                title: {
-                display: true,
-                text: 'Month'
-                }
-            },
-            y: {
-                stacked: true,
-                title: {
-                display: true,
-                text: 'Value'
-                }
-            }
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Percentage of Consumption'
+                    },
+                },
             }
         }
     });
