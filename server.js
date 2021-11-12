@@ -56,7 +56,7 @@ app.get('/year/:selected_year',(req, res) => {
         // this will require a query to the SQL database
 
         if(err || (req.params.selected_year > 2018 || req.params.selected_year < 1960) || isNaN(req.params.selected_year) === true) {
-            res.status(404).send("Error: Invalid Year");
+            res.status(404).send("ERROR! No data for year: " + req.params.selected_year);
         }
         else { 
             let response = template.replace("{{{YEAR}}}", req.params.selected_year);
@@ -162,7 +162,7 @@ app.get('/state/:selected_state', (req, res) => {
                     }
                 }
                 if(err || state_name === false) {
-                    res.status(404).send("Error: Invalid State Name");
+                    res.status(404).send("ERROR! No data for State: " + req.params.selected_state);
                 } else {
 
                 let list_items = '';
@@ -349,7 +349,7 @@ app.get('/energy/:selected_energy_source', (req, res) => {
                     }
 
                     if(err || error){
-                        res.status(404).send("Error: Invalid Energy source");
+                        res.status(404).send("ERROR! No data for energry source:" + req.params.selected_energy_source);
                     }
                     else {
 
