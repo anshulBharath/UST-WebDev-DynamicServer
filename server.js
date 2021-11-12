@@ -88,7 +88,7 @@ app.get('/year/:selected_year',(req, res) => {
                 //Populating table
                 for(let i=0; i<rows.length; i++){
                     list_items += '<tr>\n';
-                    list_items += '<td>' + rows[i].state_abbreviation + '</td>\n';
+                    list_items += '<td style=\"font-weight: bold;\">' + rows[i].state_abbreviation + '</td>\n';
                     list_items += '<td>' + rows[i].coal + '</td>\n';
                     list_items += '<td>' + rows[i].natural_gas + '</td>\n';
                     list_items += '<td>' + rows[i].nuclear + '</td>\n';
